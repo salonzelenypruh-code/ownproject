@@ -1,7 +1,9 @@
 node_modules/
 .next/
 .env
-.env.local
+.env*.local
+.env.*
+!.env.example
 *.db
 *.db-journal
 public/uploads/
