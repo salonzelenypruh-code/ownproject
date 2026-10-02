@@ -1,0 +1,33 @@
+import Link from "next/link";
+import { PriceSection } from "@/components/PriceSection";
+import { getServices } from "@/lib/data";
+
+export const metadata = {
+  title: "Masáže a balíčky",
+  description: "Klasická, hloubková, lymfatická a sportovní masáž, maderoterapie a balíčky masáže s kosmetikou v salonu na Zeleném pruhu, Praha 4. Ceník a rezervace.",
+};
+
+export default async function Masaze() {
+  const all = await getServices(["masaze", "balicky"]);
+  return (
+    <>
+      <div className="page-head wrap">
+        <span className="eyebrow">Péče o tělo</span>
+        <h1>Masáže</h1>
+        <ul className="chips" aria-label="Sekce stránky">
+          <li><a href="#masaze">Masáže</a></li>
+          <li><a href="#balicky">Balíčky masáže + kosmetika</a></li>
+        </ul>
+      </div>
+      <div className="wrap wrap--narrow page-body">
+        <PriceSection id="masaze" title="Masáže" items={all.filter((s) => s.category === "masaze")} />
+        <PriceSection id="balicky" title="Balíčky masáže + kosmetika" lead={<p>Spojení masáže a kosmetického ošetření v jedné návštěvě.</p>} items={all.filter((s) => s.category === "balicky")}>
+          <div className="btn-row">
+            <Link className="btn btn--primary" href="/rezervace?sluzba=masaz">Rezervovat termín</Link>
+            <Link className="btn btn--ghost" href="/darkovy-poukaz">Darovat jako poukaz</Link>
+          </div>
+        </PriceSection>
+      </div>
+    </>
+  );
+}

@@ -1,0 +1,99 @@
+"use server";
+import { z } from "zod";
+import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { db, schema } from "@/db";
+import { eq } from "drizzle-orm";
+import { esc, sendMail } from "@/lib/mail";
+import { getSettings } from "@/lib/settings";
+
+export type FormState = { ok: boolean; message: string; errors?: Record<string, string> } | null;
+
+const SERVICE_LABELS: Record<string, string> = {
+  kosmetika: "Kosmetické ošetření", pristrojove: "Přístrojové ošetření", obliceje: "Obličejová masáž",
+  masaz: "Masáž", balicek: "Balíček masáž + kosmetika", poukaz: "Dárkový poukaz", jine: "Jiné / poradím se",
+};
+
+const reservationSchema = z.object({
+  jmeno: z.string().trim().min(2, "Vyplňte prosím jméno a příjmení.").max(120),
+  telefon: z.string().trim().regex(/^[+0-9 ()-]{9,20}$/, "Vyplňte prosím telefon, ať vám můžeme termín potvrdit."),
+  email: z.string().trim().email("Zadejte prosím platný e-mail (např. jana@email.cz).").max(160),
+  sluzba: z.string().refine((v) => v in SERVICE_LABELS, "Vyberte prosím službu."),
+  termin: z.string().max(20).optional().default(""),
+  poznamka: z.string().max(2000).optional().default(""),
+});
+
+// Jednoduchá ochrana proti spamu: max. 5 odeslání z jedné IP za 10 minut (v rámci jedné instance serveru).
+const hits = new Map<string, number[]>();
+async function rateLimited() {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  const now = Date.now();
+  const list = (hits.get(ip) || []).filter((t) => now - t < 10 * 60_000);
+  list.push(now);
+  hits.set(ip, list);
+  return list.length > 5;
+}
+
+const row = (k: string, v: string) => v ? `<tr><td style="padding:6px 12px 6px 0;color:#555">${k}</td><td style="padding:6px 0"><strong>${esc(v)}</strong></td></tr>` : "";
+
+export async function submitReservation(_: FormState, fd: FormData): Promise<FormState> {
+  if (fd.get("_honey")) return { ok: true, message: "Děkujeme." };
+  const parsed = reservationSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const errors: Record<string, string> = {};
+    for (const i of parsed.error.issues) errors[String(i.path[0])] ??= i.message;
+    return { ok: false, message: "Zkontrolujte prosím zvýrazněná pole.", errors };
+  }
+  if (await rateLimited()) return { ok: false, message: "Odesíláte příliš často. Zkuste to prosím za chvíli, nebo zavolejte." };
+
+  const d = parsed.data;
+  const service = SERVICE_LABELS[d.sluzba];
+  const [created] = await db.insert(schema.submissions).values({
+    kind: d.sluzba === "poukaz" ? "poukaz" : "rezervace",
+    name: d.jmeno, phone: d.telefon, email: d.email, service, preferredDate: d.termin, note: d.poznamka,
+  }).returning();
+
+  const s = await getSettings();
+  const date = d.termin ? new Date(d.termin).toLocaleDateString("cs-CZ") : "";
+  const sent = await sendMail({
+    to: s.notifyEmail,
+    replyTo: d.email,
+    subject: `Nová žádost o ${d.sluzba === "poukaz" ? "dárkový poukaz" : "rezervaci"} – ${d.jmeno}`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
+      <h2 style="margin:0 0 12px">Nová žádost z webu</h2>
+      <table>${row("Jméno", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Služba", service)}${row("Preferovaný termín", date)}</table>
+      ${d.poznamka ? `<p style="margin-top:12px"><strong>Poznámka:</strong><br>${esc(d.poznamka).replace(/\n/g, "<br>")}</p>` : ""}
+      <p style="margin-top:16px;color:#555">Na tento e-mail můžete rovnou odpovědět – odpověď půjde zákazníkovi. Žádost najdete i v administraci v sekci Žádosti.</p></div>`,
+  });
+  if (sent) await db.update(schema.submissions).set({ emailSent: true }).where(eq(schema.submissions.id, created.id));
+  revalidatePath("/admin", "layout");
+
+  return { ok: true, message: "Děkujeme, žádost o rezervaci jsme přijali. Ozveme se vám co nejdříve a termín potvrdíme." };
+}
+
+const reviewSchema = z.object({
+  jmeno: z.string().trim().min(2, "Vyplňte prosím jméno.").max(80),
+  hodnoceni: z.coerce.number().int().min(1).max(5),
+  text: z.string().trim().min(10, "Napište prosím alespoň pár slov.").max(1500),
+});
+
+export async function submitReview(_: FormState, fd: FormData): Promise<FormState> {
+  if (fd.get("_honey")) return { ok: true, message: "Děkujeme." };
+  const parsed = reviewSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const errors: Record<string, string> = {};
+    for (const i of parsed.error.issues) errors[String(i.path[0])] ??= i.message;
+    return { ok: false, message: "Zkontrolujte prosím zvýrazněná pole.", errors };
+  }
+  if (await rateLimited()) return { ok: false, message: "Odesíláte příliš často. Zkuste to prosím za chvíli." };
+  const d = parsed.data;
+  await db.insert(schema.reviews).values({ name: d.jmeno, rating: d.hodnoceni, text: d.text, source: "web", published: false });
+  const s = await getSettings();
+  await sendMail({
+    to: s.notifyEmail,
+    subject: `Nová recenze na webu – ${d.jmeno} (${d.hodnoceni}/5)`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px"><p><strong>${esc(d.jmeno)}</strong> – ${"★".repeat(d.hodnoceni)}</p><p>${esc(d.text).replace(/\n/g, "<br>")}</p><p style="color:#555">Recenze čeká na schválení v administraci (Recenze).</p></div>`,
+  });
+  revalidatePath("/admin", "layout");
+  return { ok: true, message: "Děkujeme za recenzi! Na webu se objeví po schválení." };
+}

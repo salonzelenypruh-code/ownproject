@@ -1,0 +1,37 @@
+import { Logo } from "@/components/Logo";
+import { ReservationForm } from "@/components/ReservationForm";
+import { WaIcon } from "@/components/icons";
+import { getSettings, telHref, waHref } from "@/lib/settings";
+
+export const metadata = {
+  title: "Rezervace termínu",
+  description: "Objednejte se na kosmetiku nebo masáž v salonu na Zeleném pruhu, Praha 4. Vyplňte krátký formulář, zavolejte nebo napište na WhatsApp.",
+};
+
+export default async function Rezervace({ searchParams }: { searchParams: Promise<{ sluzba?: string }> }) {
+  const [{ sluzba }, s] = await Promise.all([searchParams, getSettings()]);
+  return (
+    <>
+      <div className="page-head wrap">
+        <span className="eyebrow">Objednejte se na termín</span>
+        <h1>Rezervace</h1>
+      </div>
+      <div className="wrap page-body">
+        <div className="form-grid">
+          <section className="panel" aria-labelledby="form-h">
+            <h2 id="form-h" className="visually-hidden">Formulář rezervace</h2>
+            <ReservationForm preset={sluzba} />
+          </section>
+          <aside className="panel call-panel" aria-labelledby="call-h">
+            <Logo size={100} />
+            <h2 id="call-h">Raději telefonicky?</h2>
+            <p>Zavolejte{s.whatsapp ? " nebo napište na WhatsApp" : ""} a domluvíme termín, který vám vyhovuje.</p>
+            <a className="call-panel__phone" href={telHref(s.phone)}>{s.phone}</a>
+            {s.whatsapp && <p style={{ margin: "12px 0 0" }}><a className="btn btn--ghost" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />Napsat na WhatsApp</a></p>}
+            <p style={{ margin: "8px 0 0" }}>Po – Pá: {s.hoursWeek}</p>
+          </aside>
+        </div>
+      </div>
+    </>
+  );
+}
