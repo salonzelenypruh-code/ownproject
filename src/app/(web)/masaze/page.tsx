@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { PriceSection } from "@/components/PriceSection";
 import { getServices } from "@/lib/data";
+import { getSettings } from "@/lib/settings";
+import { BookLink } from "@/components/BookLink";
 
 export const metadata = {
   title: "Masáže a balíčky",
@@ -8,7 +10,7 @@ export const metadata = {
 };
 
 export default async function Masaze() {
-  const all = await getServices(["masaze", "balicky"]);
+  const [all, s] = await Promise.all([getServices(["masaze", "balicky"]), getSettings()]);
   return (
     <>
       <div className="page-head wrap">
@@ -23,7 +25,7 @@ export default async function Masaze() {
         <PriceSection id="masaze" title="Masáže" items={all.filter((s) => s.category === "masaze")} />
         <PriceSection id="balicky" title="Balíčky masáže + kosmetika" lead={<p>Spojení masáže a kosmetického ošetření v jedné návštěvě.</p>} items={all.filter((s) => s.category === "balicky")}>
           <div className="btn-row">
-            <Link className="btn btn--primary" href="/rezervace?sluzba=masaz">Rezervovat termín</Link>
+            <BookLink url={s.bookingUrl} fallback="/rezervace?sluzba=masaz">Rezervovat termín</BookLink>
             <Link className="btn btn--ghost" href="/darkovy-poukaz">Darovat jako poukaz</Link>
           </div>
         </PriceSection>

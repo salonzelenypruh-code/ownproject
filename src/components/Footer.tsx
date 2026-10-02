@@ -3,6 +3,7 @@ import type { Settings } from "@/lib/settings";
 import { telHref, waHref } from "@/lib/settings";
 import { WaIcon } from "./icons";
 import { Logo } from "./Logo";
+import { BookLink } from "./BookLink";
 
 export function Footer({ s }: { s: Settings }) {
   return (
@@ -34,7 +35,7 @@ export function Footer({ s }: { s: Settings }) {
           <div className="footer-col">
             <h2>Otevírací doba</h2>
             <p>Po – Pá: {s.hoursWeek}<br />So: {s.hoursSat}<br />Ne: {s.hoursSun}</p>
-            <Link className="btn btn--primary" href="/rezervace">Rezervace</Link>
+            <BookLink url={s.bookingUrl}>Rezervace</BookLink>
           </div>
         </div>
         <div className="footer-bottom">

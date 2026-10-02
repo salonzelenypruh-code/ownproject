@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Caret } from "./icons";
 import { Logo } from "./Logo";
+import { BookLink } from "./BookLink";
 
 const SUBMENUS = [
   { href: "/kosmetika", label: "Kosmetika", id: "sub-kosmetika", items: [["osetreni", "Kosmetické ošetření"], ["pristrojove", "Přístrojové ošetření"], ["obliceje", "Obličejové masáže"]] },
@@ -11,7 +12,7 @@ const SUBMENUS = [
 ] as const;
 const LINKS = [["/darkovy-poukaz", "Dárkový poukaz"], ["/galerie", "Galerie"], ["/kontakty", "Kontakty"]] as const;
 
-export function Header() {
+export function Header({ bookingUrl }: { bookingUrl: string }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState<string | null>(null);
@@ -85,7 +86,7 @@ export function Header() {
             {LINKS.map(([href, label]) => (
               <li key={href} className="nav__item"><Link className="nav__link" href={href} aria-current={current(href)}>{label}</Link></li>
             ))}
-            <li className="nav__item nav__cta"><Link className="btn btn--primary" href="/rezervace" aria-current={current("/rezervace")}>Rezervace</Link></li>
+            <li className="nav__item nav__cta"><BookLink url={bookingUrl} aria-current={current("/rezervace")}>Rezervace</BookLink></li>
           </ul>
         </nav>
       </div>

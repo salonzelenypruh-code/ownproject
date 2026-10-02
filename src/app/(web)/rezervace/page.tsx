@@ -17,10 +17,17 @@ export default async function Rezervace({ searchParams }: { searchParams: Promis
         <h1>Rezervace</h1>
       </div>
       <div className="wrap page-body">
+        {s.bookingUrl && (
+          <section className="panel book-online" aria-labelledby="online-h">
+            <h2 id="online-h">Vyberte si volný termín online</h2>
+            <p>Volné termíny a rezervaci najdete v rezervačním systému Notino. Rezervace je hned potvrzená v kalendáři salonu.</p>
+            <a className="btn btn--primary btn--big" href={s.bookingUrl} target="_blank" rel="noopener">Rezervovat online</a>
+          </section>
+        )}
         <div className="form-grid">
           <section className="panel" aria-labelledby="form-h">
-            <h2 id="form-h" className="visually-hidden">Formulář rezervace</h2>
-            <ReservationForm preset={sluzba} />
+            <h2 id="form-h" className={s.bookingUrl ? undefined : "visually-hidden"}>{s.bookingUrl ? "Dárkový poukaz nebo dotaz" : "Formulář rezervace"}</h2>
+            <ReservationForm preset={sluzba ?? (s.bookingUrl ? "poukaz" : undefined)} inquiry={Boolean(s.bookingUrl)} />
           </section>
           <aside className="panel call-panel" aria-labelledby="call-h">
             <Logo size={100} />

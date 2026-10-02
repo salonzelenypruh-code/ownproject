@@ -17,6 +17,7 @@ export const SETTINGS = {
   voucherValue: { label: "Hodnota", group: "Dárkový poukaz", value: "[dle výběru / pevné částky]" },
   voucherValidity: { label: "Platnost", group: "Dárkový poukaz", value: "[POČET] měsíců" },
   voucherHowTo: { label: "Jak koupit", group: "Dárkový poukaz", value: "[osobně v salonu / telefonicky]" },
+  bookingUrl: { label: "Odkaz na online rezervace (Notino) – prázdné = formulář na webu", group: "Rezervace", value: "" },
   notifyEmail: { label: "Kam posílat žádosti z formulářů", group: "Formuláře", value: "galinajork@gmail.com" },
 } as const;
 

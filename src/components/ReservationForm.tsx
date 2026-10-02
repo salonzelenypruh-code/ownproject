@@ -4,7 +4,7 @@ import { submitReservation, type FormState } from "@/app/(web)/actions";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
-export function ReservationForm({ preset }: { preset?: string }) {
+export function ReservationForm({ preset, inquiry = false }: { preset?: string; inquiry?: boolean }) {
   const [state, action, pending] = useActionState<FormState, FormData>(submitReservation, null);
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ export function ReservationForm({ preset }: { preset?: string }) {
         <span className="field__error" id="email-error" aria-live="polite">{err("email")}</span>
       </div>
       <div className="field">
-        <label htmlFor="sluzba">Služba <span className="req" aria-hidden="true">*</span></label>
+        <label htmlFor="sluzba">{inquiry ? "Čeho se dotaz týká" : "Služba"} <span className="req" aria-hidden="true">*</span></label>
         <select {...field("sluzba")} required defaultValue={preset ?? ""}>
           <option value="">Vyberte službu…</option>
           <option value="kosmetika">Kosmetické ošetření</option>
@@ -62,7 +62,7 @@ export function ReservationForm({ preset }: { preset?: string }) {
       <div className="hp-field" aria-hidden="true"><label htmlFor="_honey">Nevyplňujte</label><input id="_honey" name="_honey" type="text" tabIndex={-1} autoComplete="off" /></div>
       <p className="form__note">Pole označená * jsou povinná. Termín vám potvrdíme telefonicky nebo e-mailem. Údaje použijeme jen k vyřízení rezervace.</p>
       <div className="form__actions">
-        <button className="btn btn--primary" type="submit" disabled={pending}>{pending ? "Odesílám…" : "Odeslat žádost o rezervaci"}</button>
+        <button className="btn btn--primary" type="submit" disabled={pending}>{pending ? "Odesílám…" : inquiry ? "Odeslat" : "Odeslat žádost o rezervaci"}</button>
       </div>
       <div ref={statusRef} tabIndex={-1} role="status" aria-live="polite"
         className={`form-status${state ? (state.ok ? " form-status--ok" : " form-status--err") : ""}`}>{state?.message}</div>

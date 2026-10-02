@@ -29,7 +29,7 @@ export default async function WebLayout({ children }: { children: React.ReactNod
       </head>
       <body>
         <a className="skip-link" href="#obsah">Přeskočit na obsah</a>
-        <Header />
+        <Header bookingUrl={s.bookingUrl} />
         <main id="obsah">{children}</main>
         <Footer s={s} />
       </body>

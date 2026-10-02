@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { BookLink } from "@/components/BookLink";
 import { Photo } from "@/components/Photo";
 import { JsonLd } from "@/components/JsonLd";
 import { ReviewForm } from "@/components/ReviewForm";
@@ -25,7 +26,7 @@ export default async function Home() {
         <h1>Kosmetika a masáže<br />na Zeleném pruhu</h1>
         <p className="claim">Krásné výsledky · Rozumné ceny</p>
         <div className="btn-row btn-row--center">
-          <Link className="btn btn--primary" href="/rezervace">Rezervovat termín</Link>
+          <BookLink url={s.bookingUrl}>Rezervovat termín</BookLink>
           <a className="btn btn--ghost" href="#sluzby">Naše služby</a>
         </div>
       </section>

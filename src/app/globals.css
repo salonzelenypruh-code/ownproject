@@ -481,3 +481,6 @@ p { margin: 0 0 1em; }
 .stars { color: #f3d27a; letter-spacing: 2px; font-size: 1.1rem; }
 .stars__off { color: rgba(221, 243, 226, 0.25); }
 .review-form { max-width: 720px; margin: 0 auto; }
+.book-online { text-align: center; margin-bottom: 24px; }
+.book-online p { color: var(--muted); max-width: 52ch; margin-inline: auto; }
+.btn--big { min-height: 56px; padding: 14px 32px; font-size: 1.1rem; }
