@@ -5,12 +5,18 @@ import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomBytes } from "node:crypto";
 
-const useBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+// Na Vercelu stačí připojené úložiště (BLOB_STORE_ID + automatický OIDC token), lokálně BLOB_READ_WRITE_TOKEN.
+const useBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
+/** Úložiště salonu je soukromé (Private) – fotky se servírují přes /foto/[soubor] s dlouhou mezipamětí. */
+export const BLOB_ACCESS = (process.env.BLOB_ACCESS === "public" ? "public" : "private") as "public" | "private";
+export const BLOB_PREFIX = "fotky/";
 
 async function save(name: string, data: Buffer): Promise<string> {
   if (useBlob()) {
-    const blob = await put(`fotky/${name}`, data, { access: "public", contentType: "image/webp", addRandomSuffix: false });
-    return blob.url;
+    const blob = await put(BLOB_PREFIX + name, data, {
+      access: BLOB_ACCESS, contentType: "image/webp", addRandomSuffix: false, cacheControlMaxAge: 31536000,
+    });
+    return BLOB_ACCESS === "public" ? blob.url : `/foto/${name}`;
   }
   // Lokální vývoj bez Vercel Blob: public/uploads
   const dir = path.join(process.cwd(), "public", "uploads");
@@ -39,6 +45,7 @@ export async function deleteImage(url: string | null | undefined) {
   if (!url) return;
   try {
     if (url.startsWith("/uploads/")) await unlink(path.join(process.cwd(), "public", url));
+    else if (url.startsWith("/foto/") && useBlob()) await del(BLOB_PREFIX + url.slice("/foto/".length));
     else if (url.includes("blob.vercel-storage.com") && useBlob()) await del(url);
   } catch {
     // soubor už neexistuje – nevadí
