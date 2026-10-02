@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rezervace termínu | Kosmetika a masáže na Zeleném pruhu</title>
+<meta name="description" content="Objednejte se online na kosmetiku nebo masáž v salonu na Zeleném pruhu, Praha 4. Vyplňte krátký formulář, nebo zavolejte.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:site_name" content="Kosmetika a masáže na Zeleném pruhu">
+<meta property="og:title" content="Rezervace termínu | Kosmetika a masáže na Zeleném pruhu">
+<meta property="og:description" content="Objednejte se online na kosmetiku nebo masáž v salonu na Zeleném pruhu, Praha 4. Vyplňte krátký formulář, nebo zavolejte.">
+<meta property="og:image" content="img/og-image.jpg">
+<meta name="theme-color" content="#06160c">
+<link rel="icon" href="favicon.ico?v=2" sizes="any">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="icon" href="favicon-512.png?v=2" type="image/png" sizes="512x512">
+<link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/marcellus-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+<a class="skip-link" href="#obsah">Přeskočit na obsah</a>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="index.html"><picture><source srcset="img/logo-havran.webp" type="image/webp"><img src="img/logo-havran.png" alt="" width="52" height="52"></picture><span>Kosmetika &amp; masáže</span></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="hlavni-menu" aria-label="Otevřít menu"><span class="nav-toggle__bars"></span></button>
+    <nav class="nav" id="hlavni-menu" aria-label="Hlavní menu">
+      <ul class="nav__list">
+        <li class="nav__item nav__item--has-sub">
+          <div class="nav__row"><a class="nav__link" href="kosmetika.html">Kosmetika</a><button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-kosmetika" aria-label="Podmenu Kosmetika"><svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+          <ul class="submenu" id="sub-kosmetika"><li><a href="kosmetika.html#osetreni">Kosmetické ošetření</a></li><li><a href="kosmetika.html#pristrojove">Přístrojové ošetření</a></li><li><a href="kosmetika.html#obliceje">Obličejové masáže</a></li></ul>
+        </li>
+        <li class="nav__item nav__item--has-sub">
+          <div class="nav__row"><a class="nav__link" href="masaze.html">Masáže</a><button class="nav__subtoggle" type="button" aria-expanded="false" aria-controls="sub-masaze" aria-label="Podmenu Masáže"><svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button></div>
+          <ul class="submenu" id="sub-masaze"><li><a href="masaze.html#masaze">Masáže</a></li><li><a href="masaze.html#balicky">Balíčky masáže + kosmetika</a></li></ul>
+        </li>
+        <li class="nav__item"><a class="nav__link" href="darkovy-poukaz.html">Dárkový poukaz</a></li>
+        <li class="nav__item"><a class="nav__link" href="galerie.html">Galerie</a></li>
+        <li class="nav__item"><a class="nav__link" href="kontakty.html">Kontakty</a></li>
+        <li class="nav__item nav__cta"><a class="btn btn--primary" href="rezervace.html" aria-current="page">Rezervace</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="obsah">
+<div class="page-head wrap">
+  <span class="eyebrow">Objednejte se na termín</span>
+  <h1>Rezervace</h1>
+</div>
+<div class="wrap" style="padding-bottom:72px">
+  <div class="form-grid">
+    <section class="panel" aria-labelledby="form-h">
+      <h2 id="form-h" class="visually-hidden">Formulář rezervace</h2>
+      <form class="form" id="rezervace-form" novalidate>
+        <div class="field">
+          <label for="jmeno">Jméno a příjmení <span class="req" aria-hidden="true">*</span></label>
+          <input id="jmeno" name="jmeno" type="text" autocomplete="name" required aria-describedby="jmeno-error">
+          <span class="field__error" id="jmeno-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="telefon">Telefon <span class="req" aria-hidden="true">*</span></label>
+          <input id="telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="telefon-error">
+          <span class="field__error" id="telefon-error" aria-live="polite"></span>
+        </div>
+        <div class="field field--full">
+          <label for="email">E-mail <span class="req" aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error">
+          <span class="field__error" id="email-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="sluzba">Služba <span class="req" aria-hidden="true">*</span></label>
+          <select id="sluzba" name="sluzba" required aria-describedby="sluzba-error">
+            <option value="">Vyberte službu…</option>
+            <option value="kosmetika">Kosmetické ošetření</option>
+            <option value="pristrojove">Přístrojové ošetření</option>
+            <option value="obliceje">Obličejová masáž</option>
+            <option value="masaz">Masáž</option>
+            <option value="balicek">Balíček masáž + kosmetika</option>
+            <option value="poukaz">Dárkový poukaz</option>
+            <option value="jine">Jiné / poradím se</option>
+          </select>
+          <span class="field__error" id="sluzba-error" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="termin">Preferovaný termín</label>
+          <input id="termin" name="termin" type="date">
+        </div>
+        <div class="field field--full">
+          <label for="poznamka">Poznámka</label>
+          <textarea id="poznamka" name="poznamka" rows="4" placeholder="Např. preferovaný čas, alergie, dotaz…"></textarea>
+        </div>
+        <div class="hp-field" aria-hidden="true"><label for="_honey">Nevyplňujte</label><input id="_honey" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+        <input type="hidden" name="_subject" value="Nová žádost o rezervaci – web">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <p class="form__note">Pole označená * jsou povinná. Termín vám potvrdíme telefonicky nebo e-mailem. Údaje použijeme jen k vyřízení rezervace.</p>
+        <div class="form__actions"><button class="btn btn--primary" type="submit">Odeslat žádost o rezervaci</button></div>
+        <div class="form-status" id="form-status" role="status" aria-live="polite" tabindex="-1"></div>
+      </form>
+    </section>
+    <aside class="panel call-panel" aria-labelledby="call-h">
+      <picture><source srcset="img/logo-havran.webp" type="image/webp"><img src="img/logo-havran.png" alt="" width="100" height="100"></picture>
+      <h2 id="call-h">Raději telefonicky?</h2>
+      <p>Zavolejte nebo napište na WhatsApp a domluvíme termín, který vám vyhovuje.</p>
+      <a class="call-panel__phone" href="tel:+420770637825">+420&nbsp;770&nbsp;637&nbsp;825</a>
+      <p style="margin:12px 0 0"><a class="btn btn--ghost" href="https://wa.me/420770637825" target="_blank" rel="noopener"><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>Napsat na WhatsApp</a></p>
+      <p style="margin:8px 0 0">Po – Pá: [OD – DO]</p>
+    </aside>
+  </div>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <picture><source srcset="img/logo-havran.webp" type="image/webp"><img src="img/logo-havran.png" alt="" width="72" height="72"></picture>
+        <p class="footer-brand__name">Kosmetika &amp; masáže<br>na Zeleném pruhu</p>
+        <p class="footer-brand__claim">Krásné výsledky · Rozumné ceny</p>
+      </div>
+      <nav class="footer-col" aria-label="Menu v patičce">
+        <h2>Menu</h2>
+        <ul>
+          <li><a href="kosmetika.html">Kosmetika</a></li>
+          <li><a href="masaze.html">Masáže a balíčky</a></li>
+          <li><a href="darkovy-poukaz.html">Dárkový poukaz</a></li>
+          <li><a href="galerie.html">Galerie</a></li>
+          <li><a href="kontakty.html">Kontakty</a></li>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h2>Kontakt</h2>
+        <p>Zelený pruh [ČÍSLO]<br>[PSČ] Praha 4</p>
+        <p><a href="tel:+420770637825">+420&nbsp;770&nbsp;637&nbsp;825</a></p>
+        <p><a class="wa-link" href="https://wa.me/420770637825" target="_blank" rel="noopener"><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>WhatsApp</a></p>
+        <p><a href="mailto:galinajork@gmail.com">galinajork@gmail.com</a></p>
+      </div>
+      <div class="footer-col">
+        <h2>Otevírací doba</h2>
+        <p>Po – Pá: [OD – DO]<br>So: [OD – DO]<br>Ne: [zavřeno]</p>
+        <a class="btn btn--primary" href="rezervace.html">Rezervace</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Galyna Tretyak</span>
+      <span>Kosmetika a masáže na Zeleném pruhu, Praha 4</span>
+    </div>
+  </div>
+</footer>
+<script src="js/menu.js?v=4" defer></script>
+<script src="js/rezervace.js?v=4" defer></script>
+</body>
+</html>
