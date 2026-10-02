@@ -1,12 +1,10 @@
+import { pageMeta } from "@/lib/seo";
 import { Logo } from "@/components/Logo";
 import { ReservationForm } from "@/components/ReservationForm";
 import { WaIcon } from "@/components/icons";
 import { getSettings, telHref, waHref } from "@/lib/settings";
 
-export const metadata = {
-  title: "Rezervace termínu",
-  description: "Objednejte se na kosmetiku nebo masáž v salonu na Zeleném pruhu, Praha 4. Vyplňte krátký formulář, zavolejte nebo napište na WhatsApp.",
-};
+export const metadata = pageMeta("/rezervace", "Rezervace termínu", "Objednejte se na kosmetiku nebo masáž v salonu na Zeleném pruhu, Praha 4 – online, telefonem nebo přes WhatsApp.");
 
 export default async function Rezervace({ searchParams }: { searchParams: Promise<{ sluzba?: string }> }) {
   const [{ sluzba }, s] = await Promise.all([searchParams, getSettings()]);

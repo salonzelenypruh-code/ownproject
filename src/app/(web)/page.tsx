@@ -1,3 +1,4 @@
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { BookLink } from "@/components/BookLink";
@@ -8,19 +9,18 @@ import { Stars } from "@/components/icons";
 import { getPhotos, getPublishedReviews, getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 
-export const metadata = {
-  description: "Kosmetický a masážní salon Galyny Tretyak na Zeleném pruhu v Praze 4. Kosmetické ošetření, přístrojová kosmetika, masáže a dárkové poukazy. Krásné výsledky za rozumné ceny.",
-};
+export const metadata = pageMeta("/", null, "Kosmetický a masážní salon Galyny Tretyak v Praze 4. Ošetření pleti s kosmetikou GIGI, přístrojová kosmetika, masáže obličeje i těla a dárkové poukazy.");
 
 export default async function Home() {
-  const [trio, portrait, reviews, s, massages] = await Promise.all([
-    getPhotos("uvod"), getPhotos("portret"), getPublishedReviews(), getSettings(), getServices(["masaze"]),
+  const [trio, portrait, reviews, s, allServices] = await Promise.all([
+    getPhotos("uvod"), getPhotos("portret"), getPublishedReviews(), getSettings(), getServices(["osetreni", "pristrojove", "obliceje", "masaze", "balicky"]),
   ]);
+  const massages = allServices.filter((x) => x.category === "masaze");
   const massageNames = massages.map((m) => m.name.replace(/ masáž$/, "")).join(", ");
 
   return (
     <>
-      <JsonLd s={s} />
+      <JsonLd s={s} services={allServices} />
       <section className="hero wrap">
         <div className="hero__logo"><Logo size={170} alt="Logo salonu – havran na větvi před měsícem" /></div>
         <h1>Kosmetika a masáže<br />na Zeleném pruhu</h1>

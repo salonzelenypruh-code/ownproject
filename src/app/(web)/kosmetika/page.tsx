@@ -1,12 +1,10 @@
+import { pageMeta } from "@/lib/seo";
 import { PriceSection } from "@/components/PriceSection";
 import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { BookLink } from "@/components/BookLink";
 
-export const metadata = {
-  title: "Kosmetika – ošetření pleti",
-  description: "Kosmetické ošetření s kosmetikou GIGI, přístrojové ošetření pleti a obličejové masáže v salonu na Zeleném pruhu v Praze 4. Ceník a délka ošetření.",
-};
+export const metadata = pageMeta("/kosmetika", "Kosmetika Praha 4 – ošetření pleti a anti-aging", "Ošetření pleti s kosmetikou GIGI, anti-aging, super lifting, karboxyterapie, mikroproudy, mezoterapie a masáž Kobido v Praze 4. Ceník a délky ošetření.");
 
 export default async function Kosmetika() {
   const [all, s] = await Promise.all([getServices(["osetreni", "pristrojove", "obliceje"]), getSettings()]);

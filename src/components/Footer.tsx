@@ -31,6 +31,8 @@ export function Footer({ s }: { s: Settings }) {
             <p><a href={telHref(s.phone)}>{s.phone}</a></p>
             {s.whatsapp && <p><a className="wa-link" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />WhatsApp</a></p>}
             <p><a href={`mailto:${s.email}`}>{s.email}</a></p>
+            {s.instagram && <p><a href={s.instagram} target="_blank" rel="noopener me">Instagram</a></p>}
+            {s.facebook && <p><a href={s.facebook} target="_blank" rel="noopener me">Facebook</a></p>}
           </div>
           <div className="footer-col">
             <h2>Otevírací doba</h2>

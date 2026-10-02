@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const site = process.env.NEXT_PUBLIC_SITE_URL || "";
-  return ["", "/kosmetika", "/masaze", "/darkovy-poukaz", "/rezervace", "/kontakty", "/galerie"].map((p) => ({ url: `${site}${p}`, changeFrequency: "monthly", priority: p ? 0.8 : 1 }));
+  const pages: [string, number][] = [["", 1], ["/kosmetika", 0.9], ["/masaze", 0.9], ["/darkovy-poukaz", 0.7], ["/rezervace", 0.8], ["/kontakty", 0.8], ["/galerie", 0.5]];
+  return pages.map(([p, priority]) => ({ url: `${SITE_URL}${p || "/"}`, lastModified: new Date(), changeFrequency: "monthly", priority }));
 }

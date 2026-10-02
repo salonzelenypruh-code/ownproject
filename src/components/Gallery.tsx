@@ -10,10 +10,10 @@ export function Gallery({ photos, placeholders }: { photos: PhotoRow[]; placehol
   return (
     <>
       <ul className="gallery">
-        {photos.map((p) => (
+        {photos.map((p, i) => (
           <li key={p.id}>
             <button className="gallery__btn" type="button" aria-label={`Zvětšit fotku: ${p.alt}`} onClick={() => open(p)}>
-              <Photo photo={p} sizes="(max-width: 760px) calc(100vw - 32px), 780px" />
+              <Photo photo={p} lazy={i > 1} sizes="(max-width: 760px) calc(100vw - 32px), 780px" />
             </button>
           </li>
         ))}

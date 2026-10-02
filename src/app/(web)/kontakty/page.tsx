@@ -1,12 +1,10 @@
+import { pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
 import { BookLink } from "@/components/BookLink";
 import { WaIcon } from "@/components/icons";
 import { getSettings, telHref, waHref } from "@/lib/settings";
 
-export const metadata = {
-  title: "Kontakty a otevírací doba",
-  description: "Adresa, telefon, WhatsApp, e-mail a otevírací doba salonu Kosmetika a masáže na Zeleném pruhu v Praze 4.",
-};
+export const metadata = pageMeta("/kontakty", "Kontakty a otevírací doba", "Adresa, telefon, WhatsApp, e-mail, otevírací doba a mapa salonu Kosmetika a masáže na Zeleném pruhu v Praze 4.");
 
 export default async function Kontakty() {
   const s = await getSettings();

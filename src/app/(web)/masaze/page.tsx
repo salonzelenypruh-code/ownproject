@@ -1,13 +1,11 @@
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { PriceSection } from "@/components/PriceSection";
 import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { BookLink } from "@/components/BookLink";
 
-export const metadata = {
-  title: "Masáže a balíčky",
-  description: "Klasická, hloubková, lymfatická a sportovní masáž, maderoterapie a balíčky masáže s kosmetikou v salonu na Zeleném pruhu, Praha 4. Ceník a rezervace.",
-};
+export const metadata = pageMeta("/masaze", "Masáže Praha 4 – klasická, lymfatická i sportovní", "Klasická, hloubková, lymfatická a sportovní masáž, maderoterapie a Stop celulitidy v Praze 4 na Zeleném pruhu. Balíčky masáže s kosmetikou. Ceník od 1 100 Kč.");
 
 export default async function Masaze() {
   const [all, s] = await Promise.all([getServices(["masaze", "balicky"]), getSettings()]);

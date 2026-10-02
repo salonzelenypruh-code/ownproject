@@ -18,6 +18,10 @@ export const SETTINGS = {
   voucherValidity: { label: "Platnost", group: "Dárkový poukaz", value: "[POČET] měsíců" },
   voucherHowTo: { label: "Jak koupit", group: "Dárkový poukaz", value: "[osobně v salonu / telefonicky]" },
   bookingUrl: { label: "Odkaz na online rezervace (Notino) – prázdné = formulář na webu", group: "Rezervace", value: "" },
+  instagram: { label: "Instagram (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
+  facebook: { label: "Facebook (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
+  googleMaps: { label: "Odkaz na firmu v Google Mapách (nepovinné)", group: "Sociální sítě a Google", value: "" },
+  googleVerification: { label: "Ověřovací kód Google Search Console (nepovinné)", group: "Sociální sítě a Google", value: "" },
   notifyEmail: { label: "Kam posílat žádosti z formulářů", group: "Formuláře", value: "galinajork@gmail.com" },
 } as const;
 

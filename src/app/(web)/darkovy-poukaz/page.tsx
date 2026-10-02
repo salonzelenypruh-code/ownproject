@@ -1,11 +1,9 @@
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { getSettings } from "@/lib/settings";
 
-export const metadata = {
-  title: "Dárkový poukaz",
-  description: "Darujte kosmetické ošetření nebo masáž. Dárkový poukaz salonu Kosmetika a masáže na Zeleném pruhu v Praze 4.",
-};
+export const metadata = pageMeta("/darkovy-poukaz", "Dárkový poukaz na kosmetiku a masáž", "Darujte kosmetické ošetření nebo masáž. Dárkový poukaz salonu Kosmetika a masáže na Zeleném pruhu v Praze 4 – ideální dárek k narozeninám i Vánocům.");
 
 export default async function Poukaz() {
   const s = await getSettings();

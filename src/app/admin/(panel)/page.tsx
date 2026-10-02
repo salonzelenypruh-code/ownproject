@@ -2,10 +2,14 @@ import Link from "next/link";
 import { count, desc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { fmtDateTime } from "@/lib/dates";
+import { getSettings } from "@/lib/settings";
+import { ActionForm, SubmitButton } from "@/components/admin/ui";
+import { saveSettings } from "../actions";
 
 export const metadata = { title: "Přehled" };
 
 export default async function Dashboard() {
+  const s = await getSettings();
   const [latest, [{ n: newSubs }], [{ n: pending }], [{ n: services }], [{ n: photos }]] = await Promise.all([
     db.select().from(schema.submissions).where(eq(schema.submissions.status, "nova")).orderBy(desc(schema.submissions.createdAt)).limit(5),
     db.select({ n: count() }).from(schema.submissions).where(eq(schema.submissions.status, "nova")),
@@ -35,6 +39,28 @@ export default async function Dashboard() {
             ))}
           </ul>
         ) : <p className="a-muted">Žádné nové žádosti.</p>}
+      </section>
+
+      <section className={`a-card${s.bookingUrl ? "" : " a-card--hot"}`} id="notino">
+        <div className="a-card__head">
+          <h2>Online rezervace (Notino)</h2>
+          <span className={`a-pill ${s.bookingUrl ? "a-pill--ok" : "a-pill--off"}`}>{s.bookingUrl ? "Zapnuto" : "Vypnuto"}</span>
+        </div>
+        <p className="a-hint">
+          {s.bookingUrl
+            ? "Tlačítka „Rezervace“ na webu vedou do Notina. Formulář na webu slouží jen pro dárkové poukazy a dotazy."
+            : "Vložte odkaz na profil salonu v Notino Partner (najdete ho v aplikaci Notino Partner). Dokud je pole prázdné, rezervace chodí přes formulář na webu."}
+        </p>
+        <ActionForm action={saveSettings} className="a-stack">
+          <label className="a-field"><span>Odkaz na profil salonu</span>
+            <input name="bookingUrl" type="url" inputMode="url" defaultValue={s.bookingUrl} className="a-input" placeholder="https://partner.notino.com/…" />
+          </label>
+          <div className="a-actions">
+            <SubmitButton>Uložit odkaz</SubmitButton>
+            {s.bookingUrl && <a className="a-btn" href={s.bookingUrl} target="_blank" rel="noopener">Vyzkoušet odkaz ↗</a>}
+          </div>
+          <p className="a-hint" style={{ margin: 0 }}>Vypnutí: smažte odkaz a uložte.</p>
+        </ActionForm>
       </section>
 
       <section className="a-card">

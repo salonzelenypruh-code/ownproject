@@ -222,3 +222,6 @@ form.a-stack > .a-sticky-save { background: linear-gradient(to top, var(--a-bg) 
 .a-login__box .a-muted { margin: 4px 0 20px; }
 .a-login__box form { text-align: left; }
 @media (max-width: 400px) { .a-top__brand span { display: none; } }
+.a-pill { display: inline-flex; align-items: center; min-height: 28px; padding: 2px 12px; border-radius: 999px; font-size: .82rem; font-weight: 700; white-space: nowrap; }
+.a-pill--ok { background: #e7f6ec; color: #135c2f; }
+.a-pill--off { background: #eef1ef; color: #5b6b61; }

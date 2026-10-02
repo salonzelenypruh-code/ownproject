@@ -249,6 +249,10 @@ export async function deleteReview(fd: FormData) {
 
 export async function saveSettings(_: ActionState, fd: FormData): Promise<ActionState> {
   await requireAdmin();
+  if (fd.has("bookingUrl")) {
+    const url = String(fd.get("bookingUrl") || "").trim();
+    if (url && !/^https:\/\/[^\s]+\.[^\s]+/.test(url)) return { ok: false, message: "Odkaz na rezervace musí začínat https:// (zkopírujte ho celý z Notina)." };
+  }
   for (const key of Object.keys(SETTINGS)) {
     if (!fd.has(key)) continue;
     const value = String(fd.get(key) || "").trim().slice(0, 500);
