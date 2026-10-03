@@ -48,7 +48,7 @@ export function Footer({ s }: { s: Settings }) {
           </p>
           <p className="footer-legal">
             <span>© {new Date().getFullYear()} Kosmetika a masáže na Zeleném pruhu</span>
-            <span>Web vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx.cz</a></span>
+            <span>Navrhl a vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx</a></span>
           </p>
         </div>
       </div>
