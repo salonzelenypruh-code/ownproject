@@ -65,18 +65,20 @@ body {
       image-set(url("/img/pozadi-tapeta.webp") type("image/webp"), url("/img/pozadi-tapeta.jpg") type("image/jpeg"));
   }
 }
-/* iOS a dotyková zařízení fixní pozadí neumí */
+/* Mobil / dotyk: background-attachment: fixed iOS neumí a opakovaná tapeta dělala viditelný šev.
+   Tapetu proto kreslí přichycená vrstva přes celou obrazovku (body::before). */
 @media (max-width: 900px), (hover: none) {
-  body { background-attachment: scroll; background-size: auto 100vh; background-repeat: repeat-y; }
-}
-@media (max-width: 900px) {
-  body {
+  body { background: #06160c; }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-color: #06160c;
     background-image:
       linear-gradient(rgba(6, 22, 12, 0.55), rgba(6, 22, 12, 0.70)),
       url("/img/pozadi-tapeta-900.jpg");
+    background-size: cover; background-position: center; background-repeat: no-repeat;
   }
   @supports (background-image: image-set(url("x.webp") type("image/webp"))) {
-    body {
+    body::before {
       background-image:
         linear-gradient(rgba(6, 22, 12, 0.55), rgba(6, 22, 12, 0.70)),
         image-set(url("/img/pozadi-tapeta-900.webp") type("image/webp"), url("/img/pozadi-tapeta-900.jpg") type("image/jpeg"));
