@@ -27,7 +27,7 @@ export function Footer({ s }: { s: Settings }) {
           </nav>
           <div className="footer-col">
             <h2>Kontakt</h2>
-            <p>{s.street}<br />{s.city}</p>
+            <p>{s.place && <>{s.place}<br /></>}{s.street}<br />{s.city}</p>
             <p><a href={telHref(s.phone)}>{s.phone}</a></p>
             {s.whatsapp && <p><a className="wa-link" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />WhatsApp</a></p>}
             <p><a href={`mailto:${s.email}`}>{s.email}</a></p>

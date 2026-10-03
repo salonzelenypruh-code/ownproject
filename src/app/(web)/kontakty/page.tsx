@@ -18,7 +18,7 @@ export default async function Kontakty() {
       <div className="wrap page-body">
         <div className="contact-grid">
           <section className="panel" aria-label="Kontaktní údaje">
-            <div className="contact-block"><span className="eyebrow">Adresa</span><address style={{ fontStyle: "normal" }}><p>{s.street}<br />{s.city}</p></address></div>
+            <div className="contact-block"><span className="eyebrow">Adresa</span><address style={{ fontStyle: "normal" }}><p>{s.place && <>{s.place}<br /></>}{s.street}<br />{s.city}</p></address></div>
             <div className="contact-block"><span className="eyebrow">Telefon{s.whatsapp ? " a WhatsApp" : ""}</span>
               <p><a href={telHref(s.phone)}>{s.phone}</a></p>
               {s.whatsapp && <p><a className="wa-link" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />Napsat na WhatsApp</a></p>}

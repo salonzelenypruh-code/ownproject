@@ -7,6 +7,10 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo";
 export function JsonLd({ s, services = [] }: { s: Settings; services?: Service[] }) {
   const postal = s.city.match(/^(\d{3}\s?\d{2})/)?.[1];
   const sameAs = [s.instagram, s.facebook, s.googleMaps, s.bookingUrl].filter(Boolean);
+  // „8:00 – 20:00“ -> otevírací doba pro Google (texty jako „zavřeno“ nebo „dle dohody“ se vynechají)
+  const span = (t: string) => { const m = t.match(/(\d{1,2})[:.](\d{2})\s*[–-]\s*(\d{1,2})[:.](\d{2})/); return m ? [`${m[1].padStart(2, "0")}:${m[2]}`, `${m[3].padStart(2, "0")}:${m[4]}`] : null; };
+  const hours = ([[["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], s.hoursWeek], [["Saturday"], s.hoursSat], [["Sunday"], s.hoursSun]] as [string[], string][])
+    .flatMap(([days, t]) => { const h = span(t); return h ? [{ "@type": "OpeningHoursSpecification", dayOfWeek: days, opens: h[0], closes: h[1] }] : []; });
   const prices = services.flatMap((x) => x.variants.map((v) => v.price)).filter((p): p is number => p != null);
 
   const data: Record<string, unknown> = {
@@ -24,12 +28,14 @@ export function JsonLd({ s, services = [] }: { s: Settings; services?: Service[]
     address: {
       "@type": "PostalAddress",
       streetAddress: s.street.includes("[") ? "Zelený pruh" : s.street,
+      ...(s.place ? { name: s.place } : {}),
       ...(postal ? { postalCode: postal } : {}),
-      addressLocality: "Praha 4",
+      addressLocality: s.city.replace(/^\d{3}\s?\d{2}\s*/, "") || "Praha 4",
       addressRegion: "Praha",
       addressCountry: "CZ",
     },
     areaServed: { "@type": "City", name: "Praha" },
+    ...(hours.length ? { openingHoursSpecification: hours } : {}),
     currenciesAccepted: "CZK",
     ...(prices.length ? { priceRange: `${Math.min(...prices)}–${Math.max(...prices)} Kč` } : {}),
     ...(sameAs.length ? { sameAs } : {}),

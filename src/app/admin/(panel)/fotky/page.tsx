@@ -1,8 +1,9 @@
 import { asc } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { PHOTO_PLACES, type PhotoPlace } from "@/db/schema";
-import { ActionForm, ConfirmButton, SubmitButton } from "@/components/admin/ui";
-import { deletePhoto, movePhoto, replacePhoto, savePhotoAlt, uploadPhotos } from "../../actions";
+import { ActionForm, SubmitButton } from "@/components/admin/ui";
+import { PhotoList } from "./PhotoList";
+import { uploadPhotos } from "../../actions";
 
 export const metadata = { title: "Fotky" };
 
@@ -27,36 +28,7 @@ export default async function Fotky() {
             <div className="a-card__head"><h2>{label}</h2><span className="a-muted a-small">{items.length} / {max}</span></div>
             <p className="a-hint">{HINTS[place]}</p>
 
-            <ul className="a-photos">
-              {items.map((p, i) => (
-                <li key={p.id} className="a-photo">
-                  <img src={p.urlSmall ?? p.url} alt={p.alt} loading="lazy" />
-                  <form action={savePhotoAlt} className="a-photo__alt">
-                    <input type="hidden" name="id" value={p.id} />
-                    <label className="a-field"><span>Popis fotky (pro nevidomé a Google)</span>
-                      <input name="alt" defaultValue={p.alt} className="a-input" />
-                    </label>
-                    <SubmitButton className="a-btn a-btn--sm">Uložit popis</SubmitButton>
-                  </form>
-                  <div className="a-photo__tools">
-                    {max > 1 && <>
-                      <form action={movePhoto}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="dir" value="up" /><button className="a-icon-btn" disabled={i === 0} aria-label="Posunout dopředu">←</button></form>
-                      <form action={movePhoto}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="dir" value="down" /><button className="a-icon-btn" disabled={i === items.length - 1} aria-label="Posunout dozadu">→</button></form>
-                    </>}
-                    <details className="a-replace">
-                      <summary className="a-btn a-btn--sm">Vyměnit</summary>
-                      <ActionForm action={replacePhoto} className="a-stack">
-                        <input type="hidden" name="id" value={p.id} />
-                        <input type="file" name="file" accept="image/*" required className="a-file" />
-                        <SubmitButton className="a-btn a-btn--sm a-btn--primary" pendingText="Nahrávám…">Nahrát novou</SubmitButton>
-                      </ActionForm>
-                    </details>
-                    <form action={deletePhoto}><input type="hidden" name="id" value={p.id} />
-                      <ConfirmButton message="Opravdu smazat tuto fotku z webu?" className="a-btn a-btn--danger a-btn--sm">Smazat</ConfirmButton></form>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <PhotoList place={place} photos={items} sortable={max > 1} />
 
             {!full && (
               <ActionForm action={uploadPhotos} className="a-upload" resetOnSuccess>

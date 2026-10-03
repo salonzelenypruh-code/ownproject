@@ -225,3 +225,31 @@ form.a-stack > .a-sticky-save { background: linear-gradient(to top, var(--a-bg) 
 .a-pill { display: inline-flex; align-items: center; min-height: 28px; padding: 2px 12px; border-radius: 999px; font-size: .82rem; font-weight: 700; white-space: nowrap; }
 .a-pill--ok { background: #e7f6ec; color: #135c2f; }
 .a-pill--off { background: #eef1ef; color: #5b6b61; }
+
+/* Fotky – dlaždice s přetahováním */
+.a-tiles { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 640px) { .a-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .a-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.a-tiles--single { grid-template-columns: minmax(0, 260px); }
+.a-tile { background: #fafcfb; border: 1px solid var(--a-line); border-radius: 12px; overflow: hidden; position: relative; touch-action: manipulation; }
+.a-tile--drag { z-index: 10; box-shadow: 0 14px 34px rgba(0, 0, 0, .25); border-color: #3b9e62; opacity: .95; }
+.a-tile__img { position: relative; }
+.a-tile__img img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #e9efeb; user-select: none; -webkit-user-drag: none; }
+.a-tile__num {
+  position: absolute; left: 8px; bottom: 8px; min-width: 28px; height: 28px; padding: 0 8px; border-radius: 14px;
+  background: rgba(13, 42, 24, .85); color: #fff; font-weight: 700; font-size: .85rem; display: grid; place-items: center;
+}
+.a-tile__handle {
+  position: absolute; top: 6px; right: 6px; width: 44px; height: 44px; border-radius: 10px; border: 0;
+  background: rgba(255, 255, 255, .92); color: var(--a-green); cursor: grab; display: grid; place-items: center;
+  touch-action: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+}
+.a-tile__handle:active { cursor: grabbing; }
+.a-tile__handle svg { width: 22px; height: 22px; }
+.a-tile__bar { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
+.a-tile__bar .a-btn--sm { padding: 6px 10px; font-size: .82rem; flex: 1 1 auto; }
+.a-tile__more { flex: 1 1 auto; }
+.a-tile__more > summary { list-style: none; width: 100%; }
+.a-tile__more > summary::-webkit-details-marker { display: none; }
+.a-tile__more[open] { flex-basis: 100%; }
+.a-tile__panel { display: flex; flex-direction: column; gap: 14px; padding: 10px 2px 2px; }

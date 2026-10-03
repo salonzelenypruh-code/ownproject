@@ -198,6 +198,20 @@ export async function deletePhoto(fd: FormData) {
   revalidatePath("/admin/fotky");
 }
 
+/** Nové pořadí fotek v jednom místě (po přetažení). ids = celé pořadí od první fotky. */
+export async function reorderPhotos(place: PhotoPlace, ids: number[]): Promise<ActionState> {
+  await requireAdmin();
+  if (!(place in PHOTO_PLACES)) return { ok: false, message: "Neznámé místo." };
+  const rows = await db.select({ id: schema.photos.id }).from(schema.photos).where(eq(schema.photos.place, place));
+  const known = new Set(rows.map((r) => r.id));
+  const clean = ids.filter((id) => known.has(id));
+  if (clean.length !== known.size) return { ok: false, message: "Pořadí se nepodařilo uložit, obnovte stránku." };
+  await db.batch(clean.map((id, i) => db.update(schema.photos).set({ sortOrder: i + 1 }).where(eq(schema.photos.id, id))) as [never, ...never[]]);
+  refreshWeb();
+  revalidatePath("/admin/fotky");
+  return { ok: true, message: "Pořadí uloženo." };
+}
+
 export async function movePhoto(fd: FormData) {
   await requireAdmin();
   const id = num(fd.get("id")); const dir = fd.get("dir") === "up" ? "up" : "down";
