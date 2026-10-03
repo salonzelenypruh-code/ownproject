@@ -5,6 +5,8 @@ import { BookLink } from "@/components/BookLink";
 import { Photo } from "@/components/Photo";
 import { ReviewForm } from "@/components/ReviewForm";
 import { Stars } from "@/components/icons";
+import { FaqSection } from "@/components/FaqSection";
+import { buildFaq } from "@/lib/faq";
 import { getPhotos, getPublishedReviews, getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 
@@ -20,7 +22,7 @@ export default async function Home() {
   return (
     <>
       <section className="hero wrap">
-        <div className="hero__logo"><Logo size={170} alt="Logo salonu – havran na větvi před měsícem" /></div>
+        <div className="hero__logo"><Logo size={170} priority /></div>
         <h1>Kosmetika a masáže<br />na Zeleném pruhu</h1>
         <p className="claim"><span>Krásné výsledky</span><span className="claim__dot" aria-hidden="true">·</span><span className="visually-hidden"> · </span><span>Rozumné ceny</span></p>
         <div className="btn-row btn-row--center">
@@ -76,6 +78,8 @@ export default async function Home() {
         ) : <p className="section-sub">Byli jste u nás spokojeni? Budeme rádi za vaši první recenzi.</p>}
         <ReviewForm />
       </section>
+
+      <FaqSection items={buildFaq(s, allServices)} />
     </>
   );
 }

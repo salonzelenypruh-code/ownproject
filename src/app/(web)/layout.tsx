@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { CookieBar } from "@/components/CookieBar";
 import { Tracking } from "@/components/Tracking";
 import { JsonLd } from "@/components/JsonLd";
-import { getServices } from "@/lib/data";
+import { getPublishedReviews, getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { SITE_NAME, SITE_URL, TITLE_SUFFIX } from "@/lib/seo";
 
@@ -29,15 +29,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = { themeColor: "#06160c" };
 
 export default async function WebLayout({ children }: { children: React.ReactNode }) {
-  const [s, services] = await Promise.all([getSettings(), getServices(["osetreni", "pristrojove", "obliceje", "masaze", "balicky"])]);
+  const [s, services, reviews] = await Promise.all([getSettings(), getServices(["osetreni", "pristrojove", "obliceje", "masaze", "balicky"]), getPublishedReviews()]);
   return (
     <html lang="cs">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("cookie-consent-v1"))document.documentElement.dataset.consent="1"}catch(e){}` }} />
         <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preload" href="/fonts/marcellus-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
       </head>
       <body>
-        <JsonLd s={s} services={services} />
+        <JsonLd s={s} services={services} reviews={reviews} />
         <a className="skip-link" href="#obsah">Přeskočit na obsah</a>
         <Header bookingUrl={s.bookingUrl} />
         <main id="obsah">{children}</main>

@@ -1,10 +1,10 @@
-import type { Service } from "@/db/schema";
+import type { Review, Service } from "@/db/schema";
 import { CATEGORIES } from "@/db/schema";
 import type { Settings } from "@/lib/settings";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 /** Strukturovaná data pro Google: BeautySalon + ceník (OfferCatalog). */
-export function JsonLd({ s, services = [] }: { s: Settings; services?: Service[] }) {
+export function JsonLd({ s, services = [], reviews = [] }: { s: Settings; services?: Service[]; reviews?: Review[] }) {
   const postal = s.city.match(/^(\d{3}\s?\d{2})/)?.[1];
   const sameAs = [s.instagram, s.facebook, s.googleMaps, s.bookingUrl].filter(Boolean);
   // „8:00 – 20:00“ -> otevírací doba pro Google (texty jako „zavřeno“ nebo „dle dohody“ se vynechají)
@@ -15,7 +15,7 @@ export function JsonLd({ s, services = [] }: { s: Settings; services?: Service[]
 
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "BeautySalon",
+    "@type": ["BeautySalon", "LocalBusiness"],
     "@id": `${SITE_URL}/#salon`,
     name: SITE_NAME,
     description: "Kosmetický a masážní salon Galyny Tretyak na Zeleném pruhu v Praze 4 – kosmetická ošetření s kosmetikou GIGI, přístrojová kosmetika, obličejové masáže a masáže těla.",
@@ -42,6 +42,10 @@ export function JsonLd({ s, services = [] }: { s: Settings; services?: Service[]
     currenciesAccepted: "CZK",
     ...(prices.length ? { priceRange: `${Math.min(...prices)}–${Math.max(...prices)} Kč` } : {}),
     ...(sameAs.length ? { sameAs } : {}),
+    ...(reviews.length ? {
+      aggregateRating: { "@type": "AggregateRating", ratingValue: (reviews.reduce((a, r) => a + r.rating, 0) / reviews.length).toFixed(1), reviewCount: reviews.length, bestRating: 5, worstRating: 1 },
+      review: reviews.slice(0, 10).map((r) => ({ "@type": "Review", author: { "@type": "Person", name: r.name }, reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 }, reviewBody: r.text, datePublished: r.createdAt.toISOString().slice(0, 10) })),
+    } : {}),
   };
 
   if (services.length) {

@@ -13,11 +13,12 @@ export function CookieBar() {
     return () => window.removeEventListener(OPEN_SETTINGS_EVENT, open);
   }, []);
 
-  if (consent === undefined || (consent && !forced)) return null;
+  // Lišta je v HTML hned (rychlé vykreslení); kdo už zvolil, tomu ji skryje skript v <head> (html[data-consent]).
+  if (consent && !forced) return null;
   const choose = (v: "all" | "necessary") => { saveConsent(v); setForced(false); };
 
   return (
-    <div className="cookie-bar" role="dialog" aria-live="polite" aria-labelledby="cookie-h" aria-describedby="cookie-t">
+    <div className={`cookie-bar${forced ? " cookie-bar--forced" : ""}`} role="dialog" aria-live="polite" aria-labelledby="cookie-h" aria-describedby="cookie-t">
       <div className="cookie-bar__inner">
         <div>
           <p id="cookie-h" className="cookie-bar__title">Cookies</p>

@@ -577,3 +577,16 @@ p { margin: 0 0 1em; }
 .prose li { margin-bottom: .5em; }
 .h1-sub { display: block; font-family: var(--font-body); font-size: .9rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-text, #e2c47f); margin-top: 10px; }
 .page-lead { color: var(--muted); max-width: 56ch; margin: 4px auto 0; }
+
+/* ---------- Časté otázky ---------- */
+.faq { display: flex; flex-direction: column; gap: 10px; }
+.faq__item { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--r-panel); }
+.faq__item summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 56px; padding: 14px 20px; font-weight: 600; font-size: 1.02rem;
+}
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--gold, #d4b26a); transition: transform .2s; flex-shrink: 0; }
+.faq__item[open] summary::after { transform: rotate(45deg); }
+.faq__item p { margin: 0; padding: 0 20px 18px; color: var(--muted); }
+html[data-consent] .cookie-bar:not(.cookie-bar--forced) { display: none; }
