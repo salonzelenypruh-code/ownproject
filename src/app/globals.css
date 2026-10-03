@@ -545,3 +545,33 @@ p { margin: 0 0 1em; }
 .book-online { text-align: center; margin-bottom: 24px; }
 .book-online p { color: var(--muted); max-width: 52ch; margin-inline: auto; }
 .btn--big { min-height: 56px; padding: 14px 32px; font-size: 1.1rem; }
+
+/* ---------- Cookies ---------- */
+.cookie-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 150;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  background: rgba(3, 11, 6, .97); border-top: 1px solid rgba(212, 178, 106, .45);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, .35);
+}
+.cookie-bar__inner { max-width: var(--wrap); margin: 0 auto; padding-inline: 8px; display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.cookie-bar__title { font-family: var(--font-head); font-size: 1.15rem; color: var(--gold-text, #e2c47f); margin: 0 0 4px; }
+.cookie-bar__text { margin: 0; color: var(--muted); font-size: .92rem; max-width: 70ch; }
+.cookie-bar__actions { display: flex; gap: 10px; flex-shrink: 0; }
+@media (max-width: 760px) {
+  .cookie-bar__inner { flex-direction: column; align-items: stretch; }
+  .cookie-bar__actions .btn { flex: 1; }
+}
+.link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.link-btn:hover { color: #fff; }
+.footer-bottom__links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 18px; }
+.footer-bottom__links > a { color: var(--muted) !important; font-weight: 400 !important; }
+.map-placeholder {
+  flex: 1; min-height: 420px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  text-align: center; padding: 24px; border-radius: 8px; background: rgba(221, 243, 226, 0.05); border: 1px dashed var(--panel-border);
+}
+.map-placeholder svg { width: 40px; height: 40px; color: var(--gold, #d4b26a); }
+.map-placeholder__addr { font-family: var(--font-head); font-size: 1.25rem; margin: 0; }
+.map-placeholder__note { color: var(--muted); font-size: .9rem; max-width: 40ch; margin: 0 0 8px; }
+.prose h2 { font-size: 1.4rem; margin-top: 1.4em; }
+.prose ul { padding-left: 1.2em; }
+.prose li { margin-bottom: .5em; }

@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CookieBar } from "@/components/CookieBar";
+import { Tracking } from "@/components/Tracking";
 import { getSettings } from "@/lib/settings";
 import { SITE_NAME, SITE_URL, TITLE_SUFFIX } from "@/lib/seo";
 
@@ -37,6 +39,8 @@ export default async function WebLayout({ children }: { children: React.ReactNod
         <Header bookingUrl={s.bookingUrl} />
         <main id="obsah">{children}</main>
         <Footer s={s} />
+        <CookieBar />
+        <Tracking gaId={s.gaId} fbPixelId={s.fbPixelId} />
       </body>
     </html>
   );

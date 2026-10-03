@@ -4,6 +4,7 @@ import { telHref, waHref } from "@/lib/settings";
 import { WaIcon } from "./icons";
 import { Logo } from "./Logo";
 import { BookLink } from "./BookLink";
+import { CookieSettingsLink } from "./CookieBar";
 
 const Icon = ({ d }: { d: string }) => (
   <svg className="f-ico" viewBox="0 0 24 24" aria-hidden="true"><path d={d} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -78,7 +79,7 @@ export function Footer({ s }: { s: Settings }) {
 
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Kosmetika a masáže na Zeleném pruhu{operator.length > 0 && <> · Provozovatel: {operator.join(", ")}</>}</p>
-          <p>Navrhl a vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx</a></p>
+          <p className="footer-bottom__links"><Link href="/cookies">Cookies</Link><CookieSettingsLink /><span>Navrhl a vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx</a></span></p>
         </div>
       </div>
     </footer>

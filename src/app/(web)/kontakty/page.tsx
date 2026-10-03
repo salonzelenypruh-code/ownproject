@@ -1,5 +1,6 @@
 import { pageMeta } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
+import { MapEmbed } from "@/components/MapEmbed";
 import { BookLink } from "@/components/BookLink";
 import { WaIcon } from "@/components/icons";
 import { getSettings, telHref, waHref } from "@/lib/settings";
@@ -34,7 +35,7 @@ export default async function Kontakty() {
             <BookLink url={s.bookingUrl}>Rezervovat termín</BookLink>
           </section>
           <div className="panel map-panel">
-            <iframe title={`Mapa – ${s.mapQuery}`} src={`https://www.google.com/maps?q=${encodeURIComponent(s.mapQuery)}&z=15&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+            <MapEmbed query={s.mapQuery} directionsUrl={s.googleMaps || `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.mapQuery)}`} />
           </div>
         </div>
       </div>

@@ -25,6 +25,8 @@ export const SETTINGS = {
   instagram: { label: "Instagram (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
   facebook: { label: "Facebook (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
   googleMaps: { label: "Odkaz na firmu v Google Mapách (nepovinné)", group: "Sociální sítě a Google", value: "" },
+  gaId: { label: "Google Analytics 4 – ID měření (G-XXXXXXX, nepovinné)", group: "Sociální sítě a Google", value: "" },
+  fbPixelId: { label: "Facebook Pixel ID (jen číslice, nepovinné)", group: "Sociální sítě a Google", value: "" },
   googleVerification: { label: "Ověřovací kód Google Search Console (nepovinné)", group: "Sociální sítě a Google", value: "" },
   notifyEmail: { label: "Kam posílat žádosti z formulářů", group: "Formuláře", value: "galinajork@gmail.com" },
 } as const;
