@@ -15,7 +15,7 @@ export function JsonLd({ s, services = [], reviews = [] }: { s: Settings; servic
 
   const data: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": ["BeautySalon", "LocalBusiness"],
+    "@type": ["BeautySalon", "LocalBusiness", "Organization"],
     "@id": `${SITE_URL}/#salon`,
     name: SITE_NAME,
     description: "Kosmetický a masážní salon Galyny Tretyak na Zeleném pruhu v Praze 4 – kosmetická ošetření s kosmetikou GIGI, přístrojová kosmetika, obličejové masáže a masáže těla.",

@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { Gallery } from "@/components/Gallery";
 import { getPhotos } from "@/lib/data";
@@ -8,6 +9,7 @@ export default async function Galerie() {
   const photos = await getPhotos("galerie");
   return (
     <>
+      <Breadcrumbs items={[["Galerie", "/galerie"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Nahlédněte do salonu</span>
         <h1>Galerie</h1>

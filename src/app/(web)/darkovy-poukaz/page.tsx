@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
@@ -9,6 +10,7 @@ export default async function Poukaz() {
   const s = await getSettings();
   return (
     <>
+      <Breadcrumbs items={[["Dárkový poukaz", "/darkovy-poukaz"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Darujte péči a relaxaci</span>
         <h1>Dárkový poukaz</h1>

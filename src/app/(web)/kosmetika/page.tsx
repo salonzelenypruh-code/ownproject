@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { PriceSection } from "@/components/PriceSection";
 import { getServices } from "@/lib/data";
@@ -11,6 +12,7 @@ export default async function Kosmetika() {
   const by = (c: string) => all.filter((s) => s.category === c);
   return (
     <>
+      <Breadcrumbs items={[["Kosmetika", "/kosmetika"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Péče o pleť</span>
         <h1>Kosmetika<span className="h1-sub">Praha 4 – Braník</span></h1>

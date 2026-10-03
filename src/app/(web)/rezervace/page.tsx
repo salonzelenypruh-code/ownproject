@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { Logo } from "@/components/Logo";
 import { ReservationForm } from "@/components/ReservationForm";
@@ -10,6 +11,7 @@ export default async function Rezervace({ searchParams }: { searchParams: Promis
   const [{ sluzba }, s] = await Promise.all([searchParams, getSettings()]);
   return (
     <>
+      <Breadcrumbs items={[["Rezervace", "/rezervace"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Objednejte se na termín</span>
         <h1>Rezervace</h1>

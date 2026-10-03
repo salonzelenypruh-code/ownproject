@@ -38,6 +38,7 @@ export async function GET() {
     `- [Kosmetika](${SITE_URL}/kosmetika): kosmetická a přístrojová ošetření, obličejové masáže`,
     `- [Masáže](${SITE_URL}/masaze): masáže těla a balíčky masáž + kosmetika`,
     `- [Dárkový poukaz](${SITE_URL}/darkovy-poukaz)`,
+    `- [O salonu](${SITE_URL}/o-nas)`,
     `- [Kontakty](${SITE_URL}/kontakty)`,
     `- [Galerie](${SITE_URL}/galerie)`, "");
   return new Response(lines.join("\n"), { headers: { "Content-Type": "text/plain; charset=utf-8" } });

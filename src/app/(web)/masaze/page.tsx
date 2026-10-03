@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { PriceSection } from "@/components/PriceSection";
@@ -11,6 +12,7 @@ export default async function Masaze() {
   const [all, s] = await Promise.all([getServices(["masaze", "balicky"]), getSettings()]);
   return (
     <>
+      <Breadcrumbs items={[["Masáže", "/masaze"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Péče o tělo</span>
         <h1>Masáže<span className="h1-sub">Praha 4 – Braník</span></h1>

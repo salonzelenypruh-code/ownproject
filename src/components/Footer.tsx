@@ -68,6 +68,7 @@ export function Footer({ s }: { s: Settings }) {
           <nav className="footer-col" aria-label="Menu v patičce">
             <h2>Menu</h2>
             <ul className="f-menu">
+              <li><Link href="/o-nas">O salonu</Link></li>
               <li><Link href="/kosmetika">Kosmetika</Link></li>
               <li><Link href="/masaze">Masáže a balíčky</Link></li>
               <li><Link href="/darkovy-poukaz">Dárkový poukaz</Link></li>

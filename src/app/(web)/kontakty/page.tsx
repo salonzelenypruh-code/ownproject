@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { MapEmbed } from "@/components/MapEmbed";
 import { BookLink } from "@/components/BookLink";
@@ -10,6 +11,7 @@ export default async function Kontakty() {
   const s = await getSettings();
   return (
     <>
+      <Breadcrumbs items={[["Kontakty", "/kontakty"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Kde mě najdete</span>
         <h1>Kontakty<span className="h1-sub">Poliklinika Zelený pruh, Praha 4 – Braník</span></h1>

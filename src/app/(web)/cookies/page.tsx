@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { CookieSettingsLink } from "@/components/CookieBar";
 
@@ -6,6 +7,7 @@ export const metadata = pageMeta("/cookies", "Cookies", "Jaké cookies použív�
 export default function Cookies() {
   return (
     <>
+      <Breadcrumbs items={[["Cookies", "/cookies"]]} />
       <div className="page-head wrap">
         <span className="eyebrow">Informace</span>
         <h1>Cookies</h1>
