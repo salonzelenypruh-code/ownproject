@@ -1,20 +1,18 @@
 import { pageMeta } from "@/lib/seo";
-import { JsonLd } from "@/components/JsonLd";
 import { MapEmbed } from "@/components/MapEmbed";
 import { BookLink } from "@/components/BookLink";
 import { WaIcon } from "@/components/icons";
 import { getSettings, telHref, waHref } from "@/lib/settings";
 
-export const metadata = pageMeta("/kontakty", "Kontakty a otevírací doba", "Adresa, telefon, WhatsApp, e-mail, otevírací doba a mapa salonu Kosmetika a masáže na Zeleném pruhu v Praze 4.");
+export const metadata = pageMeta("/kontakty", "Kontakt – Roškotova 1717/2, Praha 4 – Braník", "Salon najdete v Poliklinice Zelený pruh, Roškotova 1717/2, Praha 4 – Braník. Otevřeno Po–So 8:00–20:00. Telefon, WhatsApp, e-mail a mapa.");
 
 export default async function Kontakty() {
   const s = await getSettings();
   return (
     <>
-      <JsonLd s={s} />
       <div className="page-head wrap">
         <span className="eyebrow">Kde mě najdete</span>
-        <h1>Kontakty</h1>
+        <h1>Kontakty<span className="h1-sub">Poliklinika Zelený pruh, Praha 4 – Braník</span></h1>
       </div>
       <div className="wrap page-body">
         <div className="contact-grid">

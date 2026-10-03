@@ -4,6 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CookieBar } from "@/components/CookieBar";
 import { Tracking } from "@/components/Tracking";
+import { JsonLd } from "@/components/JsonLd";
+import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { SITE_NAME, SITE_URL, TITLE_SUFFIX } from "@/lib/seo";
 
@@ -11,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: `${SITE_NAME} | Praha 4`, template: `%s | ${TITLE_SUFFIX}` },
+    title: { default: `Kosmetika a masáže Praha 4 – Braník | Zelený pruh`, template: `%s | ${TITLE_SUFFIX}` },
     description: "Kosmetický a masážní salon Galyny Tretyak na Zeleném pruhu v Praze 4.",
     applicationName: SITE_NAME,
     authors: [{ name: "Galyna Tretyak" }],
@@ -27,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = { themeColor: "#06160c" };
 
 export default async function WebLayout({ children }: { children: React.ReactNode }) {
-  const s = await getSettings();
+  const [s, services] = await Promise.all([getSettings(), getServices(["osetreni", "pristrojove", "obliceje", "masaze", "balicky"])]);
   return (
     <html lang="cs">
       <head>
@@ -35,6 +37,7 @@ export default async function WebLayout({ children }: { children: React.ReactNod
         <link rel="preload" href="/fonts/marcellus-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
       </head>
       <body>
+        <JsonLd s={s} services={services} />
         <a className="skip-link" href="#obsah">Přeskočit na obsah</a>
         <Header bookingUrl={s.bookingUrl} />
         <main id="obsah">{children}</main>

@@ -575,3 +575,5 @@ p { margin: 0 0 1em; }
 .prose h2 { font-size: 1.4rem; margin-top: 1.4em; }
 .prose ul { padding-left: 1.2em; }
 .prose li { margin-bottom: .5em; }
+.h1-sub { display: block; font-family: var(--font-body); font-size: .9rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-text, #e2c47f); margin-top: 10px; }
+.page-lead { color: var(--muted); max-width: 56ch; margin: 4px auto 0; }

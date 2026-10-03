@@ -4,7 +4,7 @@ import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { BookLink } from "@/components/BookLink";
 
-export const metadata = pageMeta("/kosmetika", "Kosmetika Praha 4 – ošetření pleti a anti-aging", "Ošetření pleti s kosmetikou GIGI, anti-aging, super lifting, karboxyterapie, mikroproudy, mezoterapie a masáž Kobido v Praze 4. Ceník a délky ošetření.");
+export const metadata = pageMeta("/kosmetika", "Kosmetika Praha 4 – Braník, ošetření pleti", "Kosmetika v Praze 4 – Braník: ošetření pleti s kosmetikou GIGI, anti-aging, karboxyterapie, mezoterapie a masáž Kobido. Ceník a délky ošetření.");
 
 export default async function Kosmetika() {
   const [all, s] = await Promise.all([getServices(["osetreni", "pristrojove", "obliceje"]), getSettings()]);
@@ -13,7 +13,8 @@ export default async function Kosmetika() {
     <>
       <div className="page-head wrap">
         <span className="eyebrow">Péče o pleť</span>
-        <h1>Kosmetika</h1>
+        <h1>Kosmetika<span className="h1-sub">Praha 4 – Braník</span></h1>
+        <p className="page-lead">Salon v Poliklinice Zelený pruh, Roškotova 1717/2, Praha 4 – Braník. Kousek od Krče, Podolí i Pankráce.</p>
         <ul className="chips" aria-label="Sekce stránky">
           <li><a href="#osetreni">Kosmetické ošetření</a></li>
           <li><a href="#pristrojove">Přístrojové ošetření</a></li>

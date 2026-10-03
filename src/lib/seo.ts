@@ -8,7 +8,7 @@ const OG_IMAGE = { url: "/img/og-image.jpg", width: 1200, height: 630, alt: "Kos
 /** Kompletní metadata stránky: title, description, canonical, Open Graph, Twitter.
  *  (Next metadata slučuje jen do hloubky jedné úrovně, proto se openGraph skládá celý tady.) */
 export function pageMeta(path: string, title: string | null, description: string): Metadata {
-  const fullTitle = title ? `${title} | ${TITLE_SUFFIX}` : `${SITE_NAME} | Praha 4`;
+  const fullTitle = title ? `${title} | ${TITLE_SUFFIX}` : `Kosmetika a masáže Praha 4 – Braník | Zelený pruh`;
   return {
     title: title ?? { absolute: fullTitle },
     description,

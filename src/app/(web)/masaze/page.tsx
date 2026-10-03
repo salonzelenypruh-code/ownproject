@@ -5,7 +5,7 @@ import { getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 import { BookLink } from "@/components/BookLink";
 
-export const metadata = pageMeta("/masaze", "Masáže Praha 4 – klasická, lymfatická i sportovní", "Klasická, hloubková, lymfatická a sportovní masáž, maderoterapie a Stop celulitidy v Praze 4 na Zeleném pruhu. Balíčky masáže s kosmetikou. Ceník od 1 100 Kč.");
+export const metadata = pageMeta("/masaze", "Masáže Praha 4 – Braník, klasická i lymfatická", "Masáže v Praze 4 – Braník: klasická, hloubková, lymfatická a sportovní masáž, maderoterapie a Stop celulitidy. Ceník od 1 100 Kč.");
 
 export default async function Masaze() {
   const [all, s] = await Promise.all([getServices(["masaze", "balicky"]), getSettings()]);
@@ -13,7 +13,8 @@ export default async function Masaze() {
     <>
       <div className="page-head wrap">
         <span className="eyebrow">Péče o tělo</span>
-        <h1>Masáže</h1>
+        <h1>Masáže<span className="h1-sub">Praha 4 – Braník</span></h1>
+        <p className="page-lead">Salon v Poliklinice Zelený pruh, Roškotova 1717/2, Praha 4 – Braník. Kousek od Krče, Podolí i Pankráce.</p>
         <ul className="chips" aria-label="Sekce stránky">
           <li><a href="#masaze">Masáže</a></li>
           <li><a href="#balicky">Balíčky masáže + kosmetika</a></li>

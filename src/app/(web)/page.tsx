@@ -3,13 +3,12 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { BookLink } from "@/components/BookLink";
 import { Photo } from "@/components/Photo";
-import { JsonLd } from "@/components/JsonLd";
 import { ReviewForm } from "@/components/ReviewForm";
 import { Stars } from "@/components/icons";
 import { getPhotos, getPublishedReviews, getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 
-export const metadata = pageMeta("/", null, "Kosmetický a masážní salon Galyny Tretyak v Praze 4. Ošetření pleti s kosmetikou GIGI, přístrojová kosmetika, masáže obličeje i těla a dárkové poukazy.");
+export const metadata = pageMeta("/", null, "Kosmetika a masáže v Praze 4 – Braník, v Poliklinice Zelený pruh. Ošetření pleti s kosmetikou GIGI, přístrojová kosmetika, masáže a dárkové poukazy.");
 
 export default async function Home() {
   const [trio, portrait, reviews, s, allServices] = await Promise.all([
@@ -20,7 +19,6 @@ export default async function Home() {
 
   return (
     <>
-      <JsonLd s={s} services={allServices} />
       <section className="hero wrap">
         <div className="hero__logo"><Logo size={170} alt="Logo salonu – havran na větvi před měsícem" /></div>
         <h1>Kosmetika a masáže<br />na Zeleném pruhu</h1>

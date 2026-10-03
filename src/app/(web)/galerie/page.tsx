@@ -2,7 +2,7 @@ import { pageMeta } from "@/lib/seo";
 import { Gallery } from "@/components/Gallery";
 import { getPhotos } from "@/lib/data";
 
-export const metadata = pageMeta("/galerie", "Galerie salonu", "Fotografie salonu Kosmetika a masáže na Zeleném pruhu v Praze 4 – ošetřovna se zeleným světlem, masážní místnost a čekárna.");
+export const metadata = pageMeta("/galerie", "Galerie salonu v Praze 4 – Braník", "Fotografie salonu Kosmetika a masáže na Zeleném pruhu v Praze 4 – ošetřovna se zeleným světlem, masážní místnost a čekárna.");
 
 export default async function Galerie() {
   const photos = await getPhotos("galerie");

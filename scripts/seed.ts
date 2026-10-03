@@ -44,10 +44,10 @@ const SERVICES: { category: schema.Category; name: string; description: string; 
 ];
 
 const PHOTOS: (Omit<typeof schema.photos.$inferInsert, "url" | "urlSmall"> & { file: string; small?: boolean })[] = [
-  { place: "uvod", file: "salon-1-luzko", small: true, width: 1200, height: 1799, alt: "Kosmetické lůžko se zeleným podsvícením a přístroji pro ošetření pleti", sortOrder: 1 },
-  { place: "uvod", file: "salon-2-cekarna", small: true, width: 1600, height: 706, alt: "Světlá čekárna salonu s pohovkou a vitrínou", sortOrder: 2 },
-  { place: "uvod", file: "salon-3-masazni-mistnost", small: true, width: 1600, height: 620, alt: "Masážní místnost s tapetou s liliemi", sortOrder: 3 },
-  { place: "portret", file: "galyna-tretyak", width: 700, height: 700, alt: "Galyna Tretyak, majitelka salonu", sortOrder: 1 },
+  { place: "uvod", file: "salon-1-luzko", small: true, width: 1200, height: 1799, alt: "Kosmetické lůžko se zeleným podsvícením – kosmetika Praha 4 Braník, salon Zelený pruh", sortOrder: 1 },
+  { place: "uvod", file: "salon-2-cekarna", small: true, width: 1600, height: 706, alt: "Čekárna kosmetického salonu v Poliklinice Zelený pruh, Praha 4", sortOrder: 2 },
+  { place: "uvod", file: "salon-3-masazni-mistnost", small: true, width: 1600, height: 620, alt: "Masážní místnost s tapetou s liliemi – masáže Praha 4 Braník", sortOrder: 3 },
+  { place: "portret", file: "galyna-tretyak", width: 700, height: 700, alt: "Galyna Tretyak, kosmetička a masérka – salon na Zeleném pruhu, Praha 4", sortOrder: 1 },
   { place: "galerie", file: "salon-1-luzko", small: true, width: 1200, height: 1799, alt: "Kosmetické lůžko se zeleným podsvícením", sortOrder: 1 },
   { place: "galerie", file: "salon-3-masazni-mistnost", small: true, width: 1600, height: 620, alt: "Masážní místnost s tapetou s liliemi", sortOrder: 2 },
   { place: "galerie", file: "salon-2-cekarna", small: true, width: 1600, height: 706, alt: "Čekárna salonu s pohovkou a vitrínou", sortOrder: 3 },
