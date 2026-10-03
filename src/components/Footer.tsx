@@ -24,22 +24,26 @@ export function Footer({ s }: { s: Settings }) {
     <footer className="site-footer">
       <div className="footer-line" aria-hidden="true" />
       <div className="wrap">
-        <div className="footer-grid">
+        <div className="footer-top">
           <div className="footer-brand">
-            <div className="footer-brand__head">
-              <Logo size={64} className="footer-brand__logo" />
-              <p className="footer-brand__name">Kosmetika &amp; masáže<br />na Zeleném pruhu</p>
+            <Logo size={64} className="footer-brand__logo" />
+            <div>
+              <p className="footer-brand__name">Kosmetika &amp; masáže na Zeleném pruhu</p>
+              <p className="footer-brand__claim">Krásné výsledky <span aria-hidden="true">·</span> Rozumné ceny</p>
             </div>
-            <p className="footer-brand__claim">Krásné výsledky <span aria-hidden="true">·</span> Rozumné ceny</p>
-            <BookLink url={s.bookingUrl} className="btn btn--primary">Rezervovat termín</BookLink>
+          </div>
+          <div className="footer-top__cta">
             {(s.instagram || s.facebook) && (
               <p className="footer-social">
                 {s.instagram && <a href={s.instagram} target="_blank" rel="noopener me">Instagram</a>}
                 {s.facebook && <a href={s.facebook} target="_blank" rel="noopener me">Facebook</a>}
               </p>
             )}
+            <BookLink url={s.bookingUrl} className="btn btn--primary">Rezervovat termín</BookLink>
           </div>
+        </div>
 
+        <div className="footer-grid">
           <div className="footer-col">
             <h2>Kontakt</h2>
             <ul className="f-contact">
