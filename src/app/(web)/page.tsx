@@ -24,7 +24,7 @@ export default async function Home() {
       <section className="hero wrap">
         <div className="hero__logo"><Logo size={170} alt="Logo salonu – havran na větvi před měsícem" /></div>
         <h1>Kosmetika a masáže<br />na Zeleném pruhu</h1>
-        <p className="claim">Krásné výsledky · Rozumné ceny</p>
+        <p className="claim"><span>Krásné výsledky</span><span className="claim__dot" aria-hidden="true">·</span><span className="visually-hidden"> · </span><span>Rozumné ceny</span></p>
         <div className="btn-row btn-row--center">
           <BookLink url={s.bookingUrl}>Rezervovat termín</BookLink>
           <a className="btn btn--ghost" href="#sluzby">Naše služby</a>

@@ -261,11 +261,24 @@ p { margin: 0 0 1em; }
 .hero { text-align: center; padding: clamp(48px, 8vw, 80px) 0 clamp(32px, 5vw, 48px); }
 .hero__logo { width: 170px; height: 170px; margin: 0 auto 28px; }
 .hero h1 { margin-bottom: 20px; }
+/* Claim „Krásné výsledky · Rozumné ceny“ – zlaté ozdobné písmo s linkami (záměrně bez rámečku, aby nepůsobil jako tlačítko) */
+:root { --gold: #d4b26a; --gold-text: #e2c47f; }
 .claim {
-  display: inline-block; margin: 0 0 28px; padding: 8px 20px;
-  border: 1px solid var(--panel-border); border-radius: var(--r-pill);
-  text-transform: uppercase; letter-spacing: .14em; font-size: .82rem; font-weight: 600; color: var(--accent);
-  background: rgba(6, 22, 12, 0.55);
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin: 2px 0 30px;
+  font-family: var(--font-head); font-size: clamp(1.25rem, 2.4vw, 1.55rem); letter-spacing: .06em; line-height: 1.3;
+  color: var(--gold-text);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+}
+.claim::before, .claim::after {
+  content: ""; flex-shrink: 0; width: clamp(28px, 6vw, 70px); height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold));
+}
+.claim::after { background: linear-gradient(to left, transparent, var(--gold)); }
+.claim__dot { color: var(--gold); }
+@media (max-width: 480px) {
+  .claim { gap: 10px; font-size: 1.12rem; letter-spacing: .03em; }
+  .claim::before, .claim::after { width: 18px; }
 }
 
 .photo-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -484,3 +497,8 @@ p { margin: 0 0 1em; }
 .book-online { text-align: center; margin-bottom: 24px; }
 .book-online p { color: var(--muted); max-width: 52ch; margin-inline: auto; }
 .btn--big { min-height: 56px; padding: 14px 32px; font-size: 1.1rem; }
+.footer-bottom { flex-direction: column; gap: 6px; }
+.footer-bottom p { margin: 0; }
+.footer-legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; }
+.footer-bottom a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: 24px; align-items: center; }
+.footer-bottom a:hover { color: #fff; }

@@ -41,8 +41,15 @@ export function Footer({ s }: { s: Settings }) {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Galyna Tretyak</span>
-          <span>Kosmetika a masáže na Zeleném pruhu, Praha 4</span>
+          <p className="footer-operator">
+            Provozovatel: {s.operatorName}
+            {s.operatorId && <>, IČO: {s.operatorId}</>}
+            {s.operatorAddress && <>, {s.operatorAddress}</>}
+          </p>
+          <p className="footer-legal">
+            <span>© {new Date().getFullYear()} Kosmetika a masáže na Zeleném pruhu</span>
+            <span>Web vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx.cz</a></span>
+          </p>
         </div>
       </div>
     </footer>
