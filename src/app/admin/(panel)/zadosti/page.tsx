@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { SUBMISSION_STATUS, type SubmissionStatus } from "@/db/schema";
 import { AutoSubmitSelect, ConfirmButton, SubmitButton } from "@/components/admin/ui";
@@ -7,19 +7,19 @@ import { deleteSubmission, saveSubmissionNote, setSubmissionStatus } from "../..
 import { fmtDate, fmtDateTime } from "@/lib/dates";
 import { telHref, waHref } from "@/lib/settings";
 
-export const metadata = { title: "Žádosti" };
+export const metadata = { title: "Rezervace" };
 
 export default async function Zadosti({ searchParams }: { searchParams: Promise<{ stav?: string }> }) {
   const { stav } = await searchParams;
   const filter = (stav && stav in SUBMISSION_STATUS ? stav : stav === "vse" ? "vse" : "nova") as SubmissionStatus | "vse";
   const rows = await db.select().from(schema.submissions)
-    .where(filter === "vse" ? undefined : eq(schema.submissions.status, filter))
+    .where(and(eq(schema.submissions.kind, "rezervace"), filter === "vse" ? undefined : eq(schema.submissions.status, filter)))
     .orderBy(desc(schema.submissions.createdAt));
 
   return (
     <>
-      <h1 className="a-h1">Žádosti z webu</h1>
-      <p className="a-muted a-lead">Každá žádost z rezervačního formuláře se uloží sem a zároveň přijde e-mailem.</p>
+      <h1 className="a-h1">Rezervace</h1>
+      <p className="a-muted a-lead">Žádosti o termín z formuláře na webu. Každá přijde i e-mailem. Objednávky poukazů najdete v sekci Poukazy.</p>
       <nav className="a-tabs" aria-label="Filtr">
         {[["nova", "Nové"], ["vyrizena", "Vyřízené"], ["archiv", "Archiv"], ["vse", "Vše"]].map(([k, l]) => (
           <Link key={k} href={`/admin/zadosti?stav=${k}`} aria-current={filter === k ? "page" : undefined}>{l}</Link>
@@ -43,7 +43,8 @@ export default async function Zadosti({ searchParams }: { searchParams: Promise<
             </div>
             <dl className="a-dl">
               <div><dt>Služba</dt><dd><strong>{s.service}</strong></dd></div>
-              {s.preferredDate && <div><dt>Termín</dt><dd>{fmtDate(s.preferredDate)}</dd></div>}
+              {s.preferredDate && <div><dt>Den</dt><dd>{fmtDate(s.preferredDate)}</dd></div>}
+              {s.preferredTime && <div><dt>Čas</dt><dd>{s.preferredTime}</dd></div>}
               <div><dt>Telefon</dt><dd>{s.phone}</dd></div>
               <div><dt>E-mail</dt><dd className="a-break">{s.email}</dd></div>
             </dl>

@@ -14,7 +14,7 @@ const SERVICES: { category: schema.Category; name: string; description: string; 
     description: "Enzymatický peeling, rýžový peeling, ultrazvuková špachtle, booster podle typu a stavu pleti, kosmetická masáž obličeje, dekoltu a očního okolí. Maska na obličej a dekolt zvolená podle pleti, speciální maska na oční okolí zapracovaná během masáže, LED terapie, sérum, krém a krém na oční okolí." },
   { category: "osetreni", name: "Aktivní anti-aging", variants: [v(100, 1750)],
     description: "Zaměřuje se na aktivní omlazení pleti, která má problém se začínajícími nebo pokročilejšími vráskami. Hydratace a lifting, stimulace tvorby kolagenu a elastinu, sjednocení tónu pleti.\n\nEnzymatický peeling, rýžový peeling, chemický peeling podle problematiky pleti, čištění ultrazvukovou špachtlí, neinvazivní přístrojová mezoterapie, pětikrokové ošetření očního okolí, masáž obličeje, dekoltu a očního okolí, maska, sérum, krém a krém na oční okolí." },
-  { category: "osetreni", name: "Hydratační ošetření", variants: [],
+  { category: "osetreni", name: "Hydratační ošetření", variants: [v(100, 1750)],
     description: "Zaměřené na suchou, tenkou a šupinatou pleť.\n\nEnzymatický peeling, rýžový peeling, chemický peeling, čištění ultrazvukovou špachtlí, neinvazivní mezoterapie, booster, pětikrokové ošetření očního okolí, masáž, maska a LED terapie." },
   { category: "osetreni", name: "Ošetření pro citlivou pleť", variants: [v(60, 1300)],
     description: "Zklidňující péče pro zjemnění pleti, posílení mikrobiomu a dermální bariéry. Pleť je po ošetření klidnější, hydratovaná a chráněná.\n\nEnzymatický peeling, chemický peeling, čištění ultrazvukovou špachtlí, masáž, maska a LED terapie." },

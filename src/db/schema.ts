@@ -77,6 +77,7 @@ export const submissions = sqliteTable("submissions", {
   email: text("email").notNull(),
   service: text("service").notNull().default(""),
   preferredDate: text("preferred_date").notNull().default(""),
+  preferredTime: text("preferred_time").notNull().default(""),
   note: text("note").notNull().default(""),
   status: text("status").$type<SubmissionStatus>().notNull().default("nova"),
   adminNote: text("admin_note").notNull().default(""),
@@ -101,3 +102,30 @@ export type Service = typeof services.$inferSelect;
 export type Photo = typeof photos.$inferSelect;
 export type Review = typeof reviews.$inferSelect;
 export type Submission = typeof submissions.$inferSelect;
+
+/* ---------------- Dárkové poukazy ---------------- */
+export const VOUCHER_STATUS = { aktivni: "Platný", pouzity: "Použitý", zruseny: "Zrušený" } as const;
+export type VoucherStatus = keyof typeof VOUCHER_STATUS;
+
+export const vouchers = sqliteTable("vouchers", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  /** Krátký kód pro lidi (např. ZP-7K4M-Q2XD) – na poukazu a pro ruční vyhledání. */
+  code: text("code").notNull().unique(),
+  /** Dlouhý náhodný klíč v odkazu a QR kódu – podle kódu se poukaz uhodnout nedá. */
+  token: text("token").notNull().unique(),
+  /** Hodnota v Kč, nebo null když je poukaz na konkrétní službu. */
+  amount: integer("amount"),
+  service: text("service").notNull().default(""),
+  recipientName: text("recipient_name").notNull().default(""),
+  buyerName: text("buyer_name").notNull().default(""),
+  email: text("email").notNull().default(""),
+  message: text("message").notNull().default(""),
+  /** Poslední den platnosti „YYYY-MM-DD“ (platí včetně). */
+  validUntil: text("valid_until").notNull(),
+  status: text("status").$type<VoucherStatus>().notNull().default("aktivni"),
+  usedAt: integer("used_at", { mode: "timestamp_ms" }),
+  note: text("note").notNull().default(""),
+  emailSentAt: integer("email_sent_at", { mode: "timestamp_ms" }),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
+});
+export type Voucher = typeof vouchers.$inferSelect;

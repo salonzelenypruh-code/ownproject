@@ -27,8 +27,8 @@ export function buildFaq(s: Settings, services: Service[]): Faq[] {
   if (pc || pm) out.push({ q: "Kolik stojí kosmetika a masáže?", a: [pc && `Kosmetická ošetření začínají na ${pc} Kč`, pm && `masáže na ${pm} Kč`].filter(Boolean).join(", ") + ". Kompletní ceník s délkou každého ošetření najdete na stránkách Kosmetika a Masáže." });
   if (mins.length) out.push({ q: "Jak dlouho ošetření trvá?", a: `Podle zvoleného ošetření ${Math.min(...mins)} až ${Math.max(...mins)} minut. Délka je uvedená u každé služby v ceníku.` });
   out.push(
-    { q: "Pro koho jsou ošetření vhodná?", a: "Ošetření jsou vhodná pro různé věkové kategorie, typy a stavy pleti. Každý krok – volbu peelingu, sér a masek – přizpůsobuji aktuálním potřebám vaší pleti. Pětikrokové ošetření očního okolí je vhodné od 25–27 let." },
-    { q: "Mohu koupit dárkový poukaz?", a: "Ano, dárkový poukaz můžete darovat na kosmetiku i masáže. Objednáte ho na stránce Dárkový poukaz nebo telefonicky." },
+    { q: "Pro koho jsou ošetření vhodná?", a: "Ošetření jsou vhodná pro různé věkové kategorie, typy a stavy pleti. Každý krok – volbu peelingu, sér a masek – přizpůsobuji aktuálním potřebám vaší pleti. Pětikrokové ošetření očního okolí je součástí ošetření v délce 100–130 minut a je vhodné od 25–27 let." },
+    { q: "Mohu koupit dárkový poukaz?", a: `Ano, dárkový poukaz na ${s.voucherValue} s platností ${s.voucherValidity}. Pošlu ho e-mailem s QR kódem, objednáte ho na stránce Dárkový poukaz nebo telefonicky.` },
   );
   return out;
 }

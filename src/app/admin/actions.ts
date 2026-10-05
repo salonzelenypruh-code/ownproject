@@ -1,7 +1,7 @@
 "use server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { and, asc, eq, gt, lt, desc } from "drizzle-orm";
+import { and, asc, eq, gt, gte, lt, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db, schema } from "@/db";
@@ -274,4 +274,102 @@ export async function saveSettings(_: ActionState, fd: FormData): Promise<Action
   }
   refreshWeb();
   return { ok: true, message: "Nastavení uloženo." };
+}
+
+/* ---------------- Dárkové poukazy ---------------- */
+
+export async function createVoucher(_: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const { newCode, newToken, addMonths, todayPrague } = await import("@/lib/vouchers");
+  const kind = fd.get("kind") === "service" ? "service" : "amount";
+  const amountRaw = String(fd.get("amount") === "jina" ? fd.get("amountCustom") : fd.get("amount") || "").replace(/\s/g, "");
+  const amount = kind === "amount" ? Number(amountRaw) : null;
+  const service = kind === "service" ? String(fd.get("service") || "").trim().slice(0, 160) : "";
+  if (kind === "amount" && (!Number.isFinite(amount) || !amount || amount < 100 || amount > 100000)) return { ok: false, message: "Zadejte hodnotu poukazu v Kč." };
+  if (kind === "service" && service.length < 2) return { ok: false, message: "Napište, na jakou službu poukaz je." };
+  const months = Math.min(36, Math.max(1, Number(fd.get("months")) || 6));
+  const email = String(fd.get("email") || "").trim().toLowerCase();
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, message: "E-mail nemá správný tvar." };
+
+  let created: schema.Voucher | undefined;
+  for (let i = 0; i < 5 && !created; i++) {
+    try {
+      [created] = await db.insert(schema.vouchers).values({
+        code: newCode(), token: newToken(), amount, service,
+        recipientName: String(fd.get("recipientName") || "").trim().slice(0, 120),
+        buyerName: String(fd.get("buyerName") || "").trim().slice(0, 120),
+        email, message: String(fd.get("message") || "").trim().slice(0, 400),
+        note: String(fd.get("note") || "").trim().slice(0, 1000),
+        validUntil: addMonths(todayPrague(), months),
+      }).returning();
+    } catch { /* kolize kódu – zkusit znovu */ }
+  }
+  if (!created) return { ok: false, message: "Poukaz se nepodařilo vytvořit, zkuste to znovu." };
+  if (email && fd.get("send") === "on") await sendVoucher(created.id);
+  const orderId = num(fd.get("orderId"));
+  if (orderId) {
+    await db.update(schema.submissions).set({ status: "vyrizena", adminNote: `Vystaven poukaz ${created.code}` })
+      .where(and(eq(schema.submissions.id, orderId), eq(schema.submissions.kind, "poukaz")));
+    revalidatePath("/admin", "layout");
+  }
+  revalidatePath("/admin/poukazy");
+  redirect(`/admin/poukazy?novy=${created.id}`);
+}
+
+async function sendVoucher(id: number) {
+  const [v] = await db.select().from(schema.vouchers).where(eq(schema.vouchers.id, id));
+  if (!v?.email) return false;
+  const { voucherEmail } = await import("@/lib/voucher-email");
+  const { getSettings } = await import("@/lib/settings");
+  const { sendMail } = await import("@/lib/mail");
+  const { subject, html } = voucherEmail(v, await getSettings());
+  const ok = await sendMail({ to: v.email, subject, html });
+  if (ok) await db.update(schema.vouchers).set({ emailSentAt: new Date() }).where(eq(schema.vouchers.id, id));
+  return ok;
+}
+
+export async function resendVoucher(_: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const id = num(fd.get("id"));
+  const email = String(fd.get("email") || "").trim().toLowerCase();
+  if (email) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { ok: false, message: "E-mail nemá správný tvar." };
+    await db.update(schema.vouchers).set({ email }).where(eq(schema.vouchers.id, id));
+  }
+  const ok = await sendVoucher(id);
+  revalidatePath("/admin/poukazy");
+  return ok ? { ok: true, message: "Poukaz odeslán e-mailem." } : { ok: false, message: "E-mail se nepodařilo odeslat. Pošlete poukaz přes WhatsApp nebo zkopírujte odkaz." };
+}
+
+/** Uplatnění – projde jen u platného poukazu (atomicky, nejde uplatnit dvakrát). */
+export async function redeemVoucher(_: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin();
+  const { todayPrague } = await import("@/lib/vouchers");
+  const id = num(fd.get("id"));
+  const res = await db.update(schema.vouchers)
+    .set({ status: "pouzity", usedAt: new Date() })
+    .where(and(eq(schema.vouchers.id, id), eq(schema.vouchers.status, "aktivni"), gte(schema.vouchers.validUntil, todayPrague())))
+    .returning({ id: schema.vouchers.id });
+  revalidatePath("/admin/poukazy");
+  revalidatePath("/poukaz/[token]", "page");
+  if (!res.length) return { ok: false, message: "Poukaz nelze uplatnit – už byl použit, zrušen, nebo mu vypršela platnost." };
+  return { ok: true, message: "Poukaz uplatněn ✓ Už nebude platit." };
+}
+
+export async function setVoucherStatus(fd: FormData) {
+  await requireAdmin();
+  const status = String(fd.get("status")) as schema.VoucherStatus;
+  if (!(status in schema.VOUCHER_STATUS)) return;
+  await db.update(schema.vouchers).set({ status, usedAt: status === "pouzity" ? new Date() : null }).where(eq(schema.vouchers.id, num(fd.get("id"))));
+  revalidatePath("/admin/poukazy");
+  revalidatePath("/poukaz/[token]", "page");
+}
+
+export async function findVoucher(fd: FormData) {
+  await requireAdmin();
+  const raw = String(fd.get("code") || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const code = raw.startsWith("ZP") && raw.length === 10 ? `ZP-${raw.slice(2, 6)}-${raw.slice(6, 10)}` : String(fd.get("code") || "").trim().toUpperCase();
+  const [v] = await db.select({ token: schema.vouchers.token }).from(schema.vouchers).where(eq(schema.vouchers.code, code));
+  if (v) redirect(`/poukaz/${v.token}`);
+  redirect(`/admin/poukazy?nenalezen=${encodeURIComponent(code)}`);
 }

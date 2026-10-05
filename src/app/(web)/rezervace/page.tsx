@@ -35,7 +35,7 @@ export default async function Rezervace({ searchParams }: { searchParams: Promis
             <p>Zavolejte{s.whatsapp ? " nebo napište na WhatsApp" : ""} a domluvíme termín, který vám vyhovuje.</p>
             <a className="call-panel__phone" href={telHref(s.phone)}>{s.phone}</a>
             {s.whatsapp && <p style={{ margin: "12px 0 0" }}><a className="btn btn--ghost" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />Napsat na WhatsApp</a></p>}
-            <p style={{ margin: "8px 0 0" }}>Po – Pá: {s.hoursWeek}</p>
+            <p style={{ margin: "8px 0 0" }}>Po – Pá: {s.hoursWeek}<br />So: {s.hoursSat}</p>
           </aside>
         </div>
       </div>

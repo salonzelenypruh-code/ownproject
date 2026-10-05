@@ -1,6 +1,7 @@
 "use client";
 import { startTransition, useActionState, useEffect, useRef } from "react";
 import { submitReservation, type FormState } from "@/app/(web)/actions";
+import { TIME_SLOTS } from "@/lib/time-slots";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -19,6 +20,23 @@ export function ReservationForm({ preset, inquiry = false }: { preset?: string; 
   }, [state]);
 
   const field = (name: string) => ({ name, id: name, "aria-invalid": err(name) ? true : undefined, "aria-describedby": `${name}-error` });
+
+  if (state?.ok && state.summary) {
+    const sm = state.summary;
+    return (
+      <div className="form-done" role="status" tabIndex={-1} ref={statusRef}>
+        <div className="form-done__icon" aria-hidden="true">✓</div>
+        <h2 className="form-done__title">Žádost odeslána</h2>
+        <p className="form-done__lead">Děkujeme, {sm.name.split(" ")[0]}! Ozveme se vám co nejdříve na <strong>{sm.phone}</strong> nebo e-mailem a termín potvrdíme.</p>
+        <dl className="form-done__sum">
+          <div><dt>Služba</dt><dd>{sm.service}</dd></div>
+          {sm.date && <div><dt>Den</dt><dd>{sm.date}</dd></div>}
+          {sm.time && <div><dt>Čas</dt><dd>{sm.time}</dd></div>}
+        </dl>
+        <p className="form-done__note">Termín platí až po našem potvrzení. Spěcháte? Zavolejte nám.</p>
+      </div>
+    );
+  }
 
   return (
     <form ref={formRef} className="form" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); startTransition(() => action(fd)); }} noValidate>
@@ -52,12 +70,18 @@ export function ReservationForm({ preset, inquiry = false }: { preset?: string; 
         <span className="field__error" id="sluzba-error" aria-live="polite">{err("sluzba")}</span>
       </div>
       <div className="field">
-        <label htmlFor="termin">Preferovaný termín</label>
+        <label htmlFor="termin">Preferovaný den</label>
         <input name="termin" id="termin" type="date" min={today()} suppressHydrationWarning />
+      </div>
+      <div className="field">
+        <label htmlFor="cas">Přibližný čas</label>
+        <select name="cas" id="cas" defaultValue="kdykoli">
+          {Object.entries(TIME_SLOTS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+        </select>
       </div>
       <div className="field field--full">
         <label htmlFor="poznamka">Poznámka</label>
-        <textarea name="poznamka" id="poznamka" rows={4} placeholder="Např. preferovaný čas, alergie, dotaz…" />
+        <textarea name="poznamka" id="poznamka" rows={4} placeholder="Např. konkrétní čas, alergie, dotaz…" />
       </div>
       <div className="hp-field" aria-hidden="true"><label htmlFor="_honey">Nevyplňujte</label><input id="_honey" name="_honey" type="text" tabIndex={-1} autoComplete="off" /></div>
       <p className="form__note">Pole označená * jsou povinná. Termín vám potvrdíme telefonicky nebo e-mailem. Údaje použijeme jen k vyřízení rezervace.</p>

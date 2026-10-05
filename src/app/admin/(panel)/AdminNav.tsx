@@ -5,7 +5,8 @@ import { logout } from "../actions";
 
 const ITEMS = [
   { href: "/admin", label: "Přehled", icon: "M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" },
-  { href: "/admin/zadosti", label: "Žádosti", key: "zadosti", icon: "M4 5h16v14H4zM4 7l8 6 8-6" },
+  { href: "/admin/zadosti", label: "Rezervace", key: "zadosti", icon: "M4 5h16v14H4zM4 7l8 6 8-6" },
+  { href: "/admin/poukazy", label: "Poukazy", key: "poukazy", icon: "M3 8h18v4H3zM5 12v8h14v-8M12 8v12M12 8c-2-4-6-4-6-1.5S9 8 12 8Zm0 0c2-4 6-4 6-1.5S15 8 12 8Z" },
   { href: "/admin/sluzby", label: "Služby", icon: "M5 6h14M5 12h14M5 18h9" },
   { href: "/admin/fotky", label: "Fotky", icon: "M4 6h16v12H4zM8 14l3-3 3 3 2-2 4 4M9 9.5a1 1 0 1 0 0-.01" },
   { href: "/admin/recenze", label: "Recenze", key: "recenze", icon: "M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z" },

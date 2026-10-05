@@ -28,7 +28,7 @@ export default async function Kosmetika() {
           <p>Nabízím kosmetické služby, při kterých nejde jen o kosmetiku, ale i o chvilku klidu a pohody, kdy si můžete odpočinout a zrelaxovat.</p>
           <p>Pracuji s moderními přístrojovými metodami v kombinaci s kvalitní izraelskou kosmetikou GIGI – kosmetikou, která spojuje farmaceutické standardy, přírodní ingredience, vysokou koncentraci aktivních látek a moderní biotechnologie pro okamžitě viditelné výsledky.</p>
           <p>Ošetření jsou vhodná pro různé věkové kategorie, typy a stavy pleti. Každý krok – volbu peelingu, sér a masek – přizpůsobuji aktuálním potřebám vaší pleti.</p>
-          <p>Pětikrokové ošetření očního okolí (péče v délce 100–130 min) je vhodné od 25–27 let.</p>
+          <p>Pětikrokové ošetření očního okolí je součástí kosmetických ošetření v délce 100–130 minut (není součástí základního ošetření ani ošetření pro citlivou pleť) a je vhodné od 25–27 let.</p>
         </>} />
         <PriceSection id="pristrojove" title="Přístrojové ošetření" items={by("pristrojove")} />
         <PriceSection id="obliceje" title="Obličejové masáže" items={by("obliceje")}>

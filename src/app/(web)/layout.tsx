@@ -31,7 +31,7 @@ export const viewport: Viewport = { themeColor: "#06160c" };
 export default async function WebLayout({ children }: { children: React.ReactNode }) {
   const [s, services, reviews] = await Promise.all([getSettings(), getServices(["osetreni", "pristrojove", "obliceje", "masaze", "balicky"]), getPublishedReviews()]);
   return (
-    <html lang="cs">
+    <html lang="cs" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("cookie-consent-v1"))document.documentElement.dataset.consent="1"}catch(e){}` }} />
         <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossOrigin="" />

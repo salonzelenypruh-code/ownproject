@@ -47,7 +47,7 @@ body.adm {
 /* Spodní navigace na mobilu */
 .a-nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-  display: grid; grid-template-columns: repeat(6, 1fr);
+  display: grid; grid-template-columns: repeat(7, 1fr);
   background: #fff; border-top: 1px solid var(--a-line);
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow: 0 -4px 16px rgba(0, 0, 0, .05);
@@ -253,3 +253,25 @@ form.a-stack > .a-sticky-save { background: linear-gradient(to top, var(--a-bg) 
 .a-tile__more > summary::-webkit-details-marker { display: none; }
 .a-tile__more[open] { flex-basis: 100%; }
 .a-tile__panel { display: flex; flex-direction: column; gap: 14px; padding: 10px 2px 2px; }
+
+/* Poukazy */
+.a-card--ok { background: #ecf8f0; border-color: #9fd3b0; }
+.a-mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .06em; }
+.a-voucher { border-left: 5px solid #3b9e62; }
+.a-voucher--pouzity, .a-voucher--zruseny, .a-voucher--propadly { border-left-color: #c9d0cb; }
+.a-search { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
+.a-collapse > summary { list-style: none; cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--a-green-2); }
+.a-collapse > summary::-webkit-details-marker { display: none; }
+.a-collapse[open] > summary { margin-bottom: 12px; }
+.a-collapse > form.a-card { border: 0; padding: 0; margin: 0; }
+.a-seg { display: grid; grid-template-columns: 1fr 1fr; background: #eef2ef; border-radius: 12px; padding: 4px; }
+.a-seg label { display: flex; align-items: center; justify-content: center; min-height: 44px; border-radius: 9px; font-weight: 600; cursor: pointer; }
+.a-seg label.is-on { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.12); color: var(--a-green-2); }
+.a-seg input, .a-chips input { position: absolute; opacity: 0; pointer-events: none; }
+.a-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.a-chips label { display: inline-flex; align-items: center; min-height: 44px; padding: 6px 16px; border: 1px solid #c7d3ca; border-radius: 999px; font-weight: 600; cursor: pointer; background: #fff; }
+.a-chips label.is-on { background: var(--a-green-2); border-color: var(--a-green-2); color: #fff; }
+.a-chips label:focus-within, .a-seg label:focus-within { outline: 3px solid #3b9e62; outline-offset: 2px; }
+.a-grid2--even { grid-template-columns: 1fr; }
+@media (min-width: 600px) { .a-grid2--even { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 400px) { .a-nav__item { font-size: .62rem; } .a-nav__item svg { width: 22px; height: 22px; } }

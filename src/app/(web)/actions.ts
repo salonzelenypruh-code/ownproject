@@ -6,8 +6,9 @@ import { db, schema } from "@/db";
 import { eq } from "drizzle-orm";
 import { esc, sendMail } from "@/lib/mail";
 import { getSettings } from "@/lib/settings";
+import { TIME_SLOTS } from "@/lib/time-slots";
 
-export type FormState = { ok: boolean; message: string; errors?: Record<string, string> } | null;
+export type FormState = { ok: boolean; message: string; errors?: Record<string, string>; summary?: { service: string; date: string; time: string; name: string; email: string; phone: string } } | null;
 
 const SERVICE_LABELS: Record<string, string> = {
   kosmetika: "Kosmetické ošetření", pristrojove: "Přístrojové ošetření", obliceje: "Obličejová masáž",
@@ -20,6 +21,7 @@ const reservationSchema = z.object({
   email: z.string().trim().email("Zadejte prosím platný e-mail (např. jana@email.cz).").max(160),
   sluzba: z.string().refine((v) => v in SERVICE_LABELS, "Vyberte prosím službu."),
   termin: z.string().max(20).optional().default(""),
+  cas: z.string().max(20).optional().default(""),
   poznamka: z.string().max(2000).optional().default(""),
 });
 
@@ -50,7 +52,7 @@ export async function submitReservation(_: FormState, fd: FormData): Promise<For
   const service = SERVICE_LABELS[d.sluzba];
   const [created] = await db.insert(schema.submissions).values({
     kind: d.sluzba === "poukaz" ? "poukaz" : "rezervace",
-    name: d.jmeno, phone: d.telefon, email: d.email, service, preferredDate: d.termin, note: d.poznamka,
+    name: d.jmeno, phone: d.telefon, email: d.email, service, preferredDate: d.termin, preferredTime: TIME_SLOTS[d.cas] ?? "", note: d.poznamka,
   }).returning();
 
   const s = await getSettings();
@@ -61,14 +63,14 @@ export async function submitReservation(_: FormState, fd: FormData): Promise<For
     subject: `Nová žádost o ${d.sluzba === "poukaz" ? "dárkový poukaz" : "rezervaci"} – ${d.jmeno}`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
       <h2 style="margin:0 0 12px">Nová žádost z webu</h2>
-      <table>${row("Jméno", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Služba", service)}${row("Preferovaný termín", date)}</table>
+      <table>${row("Jméno", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Služba", service)}${row("Preferovaný termín", date)}${row("Přibližný čas", TIME_SLOTS[d.cas] ?? "")}</table>
       ${d.poznamka ? `<p style="margin-top:12px"><strong>Poznámka:</strong><br>${esc(d.poznamka).replace(/\n/g, "<br>")}</p>` : ""}
       <p style="margin-top:16px;color:#555">Na tento e-mail můžete rovnou odpovědět – odpověď půjde zákazníkovi. Žádost najdete i v administraci v sekci Žádosti.</p></div>`,
   });
   if (sent) await db.update(schema.submissions).set({ emailSent: true }).where(eq(schema.submissions.id, created.id));
   revalidatePath("/admin", "layout");
 
-  return { ok: true, message: "Děkujeme, žádost o rezervaci jsme přijali. Ozveme se vám co nejdříve a termín potvrdíme." };
+  return { ok: true, message: "Děkujeme, žádost o rezervaci jsme přijali.", summary: { service, date, time: TIME_SLOTS[d.cas] ?? "", name: d.jmeno, email: d.email, phone: d.telefon } };
 }
 
 const reviewSchema = z.object({

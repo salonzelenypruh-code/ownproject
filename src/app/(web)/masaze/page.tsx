@@ -24,7 +24,7 @@ export default async function Masaze() {
       </div>
       <div className="wrap wrap--narrow page-body">
         <PriceSection id="masaze" title="Masáže" items={all.filter((s) => s.category === "masaze")} />
-        <PriceSection id="balicky" title="Balíčky masáže + kosmetika" lead={<p>Spojení masáže a kosmetického ošetření v jedné návštěvě.</p>} items={all.filter((s) => s.category === "balicky")}>
+        <PriceSection id="balicky" title="Balíčky masáže + kosmetika" lead={<p>Spojení masáže a kosmetického ošetření v jedné návštěvě. Druh masáže si domluvíme podle vašeho přání.</p>} items={all.filter((s) => s.category === "balicky")}>
           <div className="btn-row">
             <BookLink url={s.bookingUrl} fallback="/rezervace?sluzba=masaz">Rezervovat termín</BookLink>
             <Link className="btn btn--ghost" href="/darkovy-poukaz">Darovat jako poukaz</Link>
