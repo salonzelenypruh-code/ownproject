@@ -363,10 +363,11 @@ async function sendVoucher(id: number) {
   const { getSettings } = await import("@/lib/settings");
   const { sendMail } = await import("@/lib/mail");
   const { qrPng } = await import("@/lib/vouchers");
-  const { subject, html } = voucherEmail(v, await getSettings());
+  const settings = await getSettings();
+  const { subject, html } = voucherEmail(v, settings);
   const qr = (await qrPng(v)).toString("base64");
   const ok = await sendMail({
-    to: v.email, subject, html,
+    to: v.email, subject, html, bcc: settings.notifyEmail, // kopie Galině
     attachments: [{ filename: `poukaz-${v.code}.png`, content: qr, contentType: "image/png", contentId: "poukaz-qr" }],
   });
   if (ok) await db.update(schema.vouchers).set({ emailSentAt: new Date() }).where(eq(schema.vouchers.id, id));
