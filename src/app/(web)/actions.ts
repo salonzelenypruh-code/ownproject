@@ -60,9 +60,10 @@ export async function submitReservation(_: FormState, fd: FormData): Promise<For
   const sent = await sendMail({
     to: s.notifyEmail,
     replyTo: d.email,
-    subject: `Nová žádost o ${d.sluzba === "poukaz" ? "dárkový poukaz" : "rezervaci"} – ${d.jmeno}`,
+    subject: `📅 REZERVACE – ${service}${date ? `, ${date}` : ""} – ${d.jmeno}`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
-      <h2 style="margin:0 0 12px">Nová žádost z webu</h2>
+      <p style="display:inline-block;margin:0 0 10px;padding:4px 12px;border-radius:999px;background:#1d5a35;color:#fff;font-weight:bold;letter-spacing:1px">📅 REZERVACE</p>
+      <h2 style="margin:0 0 12px">Nová žádost o termín</h2>
       <table>${row("Jméno", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Služba", service)}${row("Preferovaný termín", date)}${row("Přibližný čas", TIME_SLOTS[d.cas] ?? "")}</table>
       ${d.poznamka ? `<p style="margin-top:12px"><strong>Poznámka:</strong><br>${esc(d.poznamka).replace(/\n/g, "<br>")}</p>` : ""}
       <p style="margin-top:16px;color:#555">Na tento e-mail můžete rovnou odpovědět – odpověď půjde zákazníkovi. Žádost najdete i v administraci v sekci Žádosti.</p></div>`,
@@ -93,7 +94,7 @@ export async function submitReview(_: FormState, fd: FormData): Promise<FormStat
   const s = await getSettings();
   await sendMail({
     to: s.notifyEmail,
-    subject: `Nová recenze na webu – ${d.jmeno} (${d.hodnoceni}/5)`,
+    subject: `⭐ RECENZE ke schválení – ${d.jmeno} (${d.hodnoceni}/5)`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px"><p><strong>${esc(d.jmeno)}</strong> – ${"★".repeat(d.hodnoceni)}</p><p>${esc(d.text).replace(/\n/g, "<br>")}</p><p style="color:#555">Recenze čeká na schválení v administraci (Recenze).</p></div>`,
   });
   revalidatePath("/admin", "layout");
@@ -145,9 +146,10 @@ export async function submitVoucherOrder(_: FormState, fd: FormData): Promise<Fo
   const sent = await sendMail({
     to: s.notifyEmail,
     replyTo: d.email,
-    subject: `Objednávka dárkového poukazu ${value} – ${d.jmeno}`,
+    subject: `🎁 DÁRKOVÝ POUKAZ – objednávka ${value} – ${d.jmeno}`,
     html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
-      <h2 style="margin:0 0 12px">🎁 Objednávka dárkového poukazu</h2>
+      <p style="display:inline-block;margin:0 0 10px;padding:4px 12px;border-radius:999px;background:#b8860b;color:#fff;font-weight:bold;letter-spacing:1px">🎁 DÁRKOVÝ POUKAZ</p>
+      <h2 style="margin:0 0 12px">Objednávka poukazu ${esc(value)}</h2>
       <table>${row("Hodnota", value)}${row("Objednává", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Pro koho", d.proKoho)}${row("Věnování", d.venovani)}${row("Doručení", DELIVERY[d.doruceni])}${row("E-mail obdarované/ho", d.doruceni === "obdarovany" ? d.emailObdarovane : "")}</table>
       ${d.poznamka ? `<p style="margin-top:12px"><strong>Poznámka:</strong><br>${esc(d.poznamka).replace(/\n/g, "<br>")}</p>` : ""}
       <p style="margin-top:16px;color:#555">Poukaz vystavíte v administraci: Poukazy → Objednávky z webu → Vystavit poukaz (údaje se předvyplní).</p></div>`,
