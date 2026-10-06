@@ -66,6 +66,7 @@ export function Header({ bookingUrl }: { bookingUrl: string }) {
               const cls = ["nav__item", "nav__item--has-sub", pathname === m.href && "nav__item--current", open && "nav__item--open", closedSub === m.id && "nav__item--closed"].filter(Boolean).join(" ");
               return (
                 <li key={m.id} className={cls} data-sub={m.id}
+                  onMouseEnter={() => { if (openSub && openSub !== m.id && !window.matchMedia("(max-width: 900px)").matches) setOpenSub(null); }}
                   onMouseLeave={() => setClosedSub(null)}
                   onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) { setClosedSub(null); if (!window.matchMedia("(max-width: 900px)").matches) setOpenSub(null); } }}>
                   <div className="nav__row">

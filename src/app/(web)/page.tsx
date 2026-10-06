@@ -83,13 +83,14 @@ export default async function Home() {
 
       {instagram(s.instagram) && (
         <section className="wrap wrap--narrow section" aria-labelledby="ig-nadpis" style={{ paddingTop: 0 }}>
-          <div className="panel ig-band">
-            <IgIcon />
+          <div className="ig-card">
+            <div className="ig-card__ring"><img src="/img/logo-havran-180.webp" alt="" width={90} height={90} loading="lazy" /></div>
             <div>
-              <h2 id="ig-nadpis">Sledujte mě na Instagramu</h2>
-              <p>Novinky, výsledky ošetření a volné termíny najdete na <strong>{instagram(s.instagram)!.handle}</strong>.</p>
+              <h2 id="ig-nadpis" className="ig-card__handle">{instagram(s.instagram)!.handle}</h2>
+              <p className="ig-card__name">Kosmetika &amp; masáže · Praha 4 – Braník</p>
+              <p className="ig-card__bio">Ošetření pleti s kosmetikou GIGI, masáže a výsledky z našeho salonu.</p>
+              <a className="btn btn--primary" href={instagram(s.instagram)!.url} target="_blank" rel="noopener me"><IgIcon />Sledovat na Instagramu</a>
             </div>
-            <a className="btn btn--primary" href={instagram(s.instagram)!.url} target="_blank" rel="noopener me">Otevřít Instagram</a>
           </div>
         </section>
       )}
