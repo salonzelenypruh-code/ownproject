@@ -36,7 +36,7 @@ export default async function Home() {
       {trio.length > 0 && (
         <section className="wrap section--tight" aria-label="Fotografie salonu">
           <div className="photo-trio">
-            {trio.slice(0, 3).map((p) => <Photo key={p.id} photo={p} sizes="(max-width: 700px) calc(100vw - 32px), 380px" />)}
+            {trio.slice(0, 3).map((p, i) => <Photo key={p.id} photo={p} priority={i === 0} lazy={i > 0} sizes="(max-width: 700px) calc(100vw - 32px), 380px" />)}
           </div>
         </section>
       )}
