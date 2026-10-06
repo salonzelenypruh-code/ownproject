@@ -25,7 +25,7 @@ export function voucherEmail(v: Voucher, s: Settings) {
   ${v.message ? `<p style="margin:18px 0 0;font-size:15px;font-style:italic;color:#ecf2ee">„${esc(v.message)}“</p>` : ""}
 </td></tr>
 <tr><td align="center" style="padding:8px 24px 4px">
-  <img src="${url}/qr.png" width="200" height="200" alt="QR kód poukazu" style="display:block;background:#fff;border-radius:10px;padding:8px">
+  <img src="cid:poukaz-qr" width="200" height="200" alt="QR kód poukazu" style="display:block;background:#fff;border-radius:10px;padding:8px">
   <p style="margin:12px 0 0;font-size:18px;letter-spacing:2px;font-family:'Courier New',monospace;color:#fff">${v.code}</p>
 </td></tr>
 <tr><td align="center" style="padding:18px 24px 26px">

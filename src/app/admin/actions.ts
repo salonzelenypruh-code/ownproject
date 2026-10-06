@@ -362,8 +362,13 @@ async function sendVoucher(id: number) {
   const { voucherEmail } = await import("@/lib/voucher-email");
   const { getSettings } = await import("@/lib/settings");
   const { sendMail } = await import("@/lib/mail");
+  const { qrPng } = await import("@/lib/vouchers");
   const { subject, html } = voucherEmail(v, await getSettings());
-  const ok = await sendMail({ to: v.email, subject, html });
+  const qr = (await qrPng(v)).toString("base64");
+  const ok = await sendMail({
+    to: v.email, subject, html,
+    attachments: [{ filename: `poukaz-${v.code}.png`, content: qr, contentType: "image/png", contentId: "poukaz-qr" }],
+  });
   if (ok) await db.update(schema.vouchers).set({ emailSentAt: new Date() }).where(eq(schema.vouchers.id, id));
   return ok;
 }
