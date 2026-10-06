@@ -82,7 +82,7 @@ export function Footer({ s }: { s: Settings }) {
 
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Kosmetika a masáže na Zeleném pruhu{operator.length > 0 && <> · Provozovatel: {operator.join(", ")}</>}</p>
-          <p className="footer-bottom__links"><Link href="/cookies">Cookies</Link><CookieSettingsLink /><span>Navrhl a vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx</a></span></p>
+          <p className="footer-bottom__links"><Link href="/ochrana-osobnich-udaju">Ochrana osobních údajů</Link><Link href="/cookies">Cookies</Link><CookieSettingsLink /><span>Navrhl a vytvořil <a href="https://weblyx.cz" target="_blank" rel="noopener">Weblyx</a></span></p>
         </div>
       </div>
     </footer>

@@ -660,3 +660,19 @@ html[data-consent] .cookie-bar:not(.cookie-bar--forced) { display: none; }
 .ig-band p { margin: 0; color: var(--muted); }
 .ig-band .btn { margin-left: auto; flex-shrink: 0; }
 @media (max-width: 640px) { .ig-band { flex-direction: column; text-align: center; } .ig-band .btn { margin: 0; } }
+.table-wrap { overflow-x: auto; margin: 0 0 1em; }
+.gdpr-table { width: 100%; border-collapse: collapse; font-size: .92rem; min-width: 560px; }
+.gdpr-table th, .gdpr-table td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.gdpr-table th { color: var(--gold, #d4b26a); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
+.gdpr-table td:first-child { font-weight: 600; white-space: nowrap; }
+.gdpr-meta { color: var(--muted); font-size: .88rem; margin-top: 1.5em; }
+.form__note a { color: var(--accent); }
+@media (max-width: 640px) {
+  .gdpr-table { min-width: 0; }
+  .gdpr-table thead { display: none; }
+  .gdpr-table, .gdpr-table tbody, .gdpr-table tr, .gdpr-table td { display: block; width: 100%; }
+  .gdpr-table tr { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .gdpr-table td { border: 0; padding: 3px 0; white-space: normal !important; }
+  .gdpr-table td:first-child { font-size: 1.05rem; color: var(--gold-text, #e2c47f); padding-bottom: 6px; }
+  .gdpr-table td:not(:first-child)::before { content: attr(data-label) ": "; color: var(--muted); font-weight: 600; }
+}

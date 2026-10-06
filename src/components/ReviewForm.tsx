@@ -36,6 +36,7 @@ export function ReviewForm() {
         <span className="field__error" aria-live="polite">{err("text")}</span>
       </div>
       <div className="hp-field" aria-hidden="true"><input name="_honey" type="text" tabIndex={-1} autoComplete="off" aria-label="Nevyplňujte" /></div>
+      <p className="form__note">Recenze se po schválení zobrazí na webu i s vaším jménem. <a href="/ochrana-osobnich-udaju">Ochrana osobních údajů</a></p>
       <div className="form__actions"><button className="btn btn--primary" type="submit" disabled={pending}>{pending ? "Odesílám…" : "Odeslat recenzi"}</button></div>
       <div role="status" aria-live="polite" className={`form-status${state ? (state.ok ? " form-status--ok" : " form-status--err") : ""}`}>{state?.message}</div>
     </form>

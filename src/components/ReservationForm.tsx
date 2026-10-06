@@ -84,7 +84,7 @@ export function ReservationForm({ preset, inquiry = false }: { preset?: string; 
         <textarea name="poznamka" id="poznamka" rows={4} placeholder="Např. konkrétní čas, alergie, dotaz…" />
       </div>
       <div className="hp-field" aria-hidden="true"><label htmlFor="_honey">Nevyplňujte</label><input id="_honey" name="_honey" type="text" tabIndex={-1} autoComplete="off" /></div>
-      <p className="form__note">Pole označená * jsou povinná. Termín vám potvrdíme telefonicky nebo e-mailem. Údaje použijeme jen k vyřízení rezervace.</p>
+      <p className="form__note">Pole označená * jsou povinná. Termín vám potvrdíme telefonicky nebo e-mailem. Údaje použijeme jen k vyřízení rezervace – <a href="/ochrana-osobnich-udaju">ochrana osobních údajů</a>.</p>
       <div className="form__actions">
         <button className="btn btn--primary" type="submit" disabled={pending}>{pending ? "Odesílám…" : inquiry ? "Odeslat" : "Odeslat žádost o rezervaci"}</button>
       </div>
