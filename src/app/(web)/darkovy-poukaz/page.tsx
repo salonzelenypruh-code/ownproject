@@ -1,8 +1,8 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
-import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { getSettings } from "@/lib/settings";
+import { VoucherOrderForm } from "@/components/VoucherOrderForm";
 
 export const metadata = pageMeta("/darkovy-poukaz", "Dárkový poukaz na kosmetiku a masáž", "Darujte kosmetiku nebo masáž v Praze 4 – Braník. Dárkový poukaz salonu na Zeleném pruhu – ideální dárek k narozeninám i Vánocům.");
 
@@ -36,9 +36,13 @@ export default async function Poukaz() {
               <div><dt>Platnost</dt><dd>{s.voucherValidity}</dd></div>
               <div><dt>Jak koupit</dt><dd>{s.voucherHowTo}</dd></div>
             </dl>
-            <Link className="btn btn--primary" href="/rezervace?sluzba=poukaz">Objednat poukaz</Link>
+            <a className="btn btn--primary" href="#objednat">Objednat poukaz</a>
           </section>
         </div>
+        <section className="panel vo-panel" id="objednat" aria-labelledby="objednat-h">
+          <h2 id="objednat-h">Objednat dárkový poukaz</h2>
+          <VoucherOrderForm presets={(s.voucherValue.match(/\d[\d\s]*\d/g) || []).map((x) => Number(x.replace(/\s/g, ""))).filter((n) => n >= 100)} />
+        </section>
       </div>
     </>
   );

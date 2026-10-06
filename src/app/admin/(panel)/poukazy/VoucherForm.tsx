@@ -2,10 +2,10 @@
 import { startTransition, useActionState, useState } from "react";
 import { createVoucher } from "../../actions";
 
-export function VoucherForm({ presets, months, prefill }: { presets: number[]; months: number; prefill?: { orderId: number; buyerName: string; email: string; note: string } }) {
+export function VoucherForm({ presets, months, prefill }: { presets: number[]; months: number; prefill?: { orderId: number; buyerName: string; email: string; note: string; amount?: number; recipientName?: string; message?: string } }) {
   const [state, action, pending] = useActionState(createVoucher, null);
   const [kind, setKind] = useState<"amount" | "service">("amount");
-  const [amount, setAmount] = useState(String(presets[0] ?? ""));
+  const [amount, setAmount] = useState(prefill?.amount ? (presets.includes(prefill.amount) ? String(prefill.amount) : "jina") : String(presets[0] ?? ""));
   const [email, setEmail] = useState(prefill?.email ?? "");
   return (
     <form className="a-card a-stack" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); startTransition(() => action(fd)); }}>
@@ -26,16 +26,16 @@ export function VoucherForm({ presets, months, prefill }: { presets: number[]; m
             ))}
             <label className={amount === "jina" ? "is-on" : ""}><input type="radio" name="amount" value="jina" checked={amount === "jina"} onChange={() => setAmount("jina")} />Jiná</label>
           </div>
-          {amount === "jina" && <label className="a-field"><span>Částka (Kč)</span><input name="amountCustom" inputMode="numeric" className="a-input" placeholder="Např. 1500" required /></label>}
+          {amount === "jina" && <label className="a-field"><span>Částka (Kč)</span><input name="amountCustom" inputMode="numeric" className="a-input" placeholder="Např. 1500" required defaultValue={prefill?.amount && !presets.includes(prefill.amount) ? prefill.amount : undefined} /></label>}
         </fieldset>
       ) : (
         <label className="a-field"><span>Služba</span><input name="service" className="a-input" placeholder="Např. Aktivní anti-aging (100 min)" required /></label>
       )}
       <div className="a-grid2 a-grid2--even">
-        <label className="a-field"><span>Pro koho (nepovinné)</span><input name="recipientName" className="a-input" placeholder="Jana" /></label>
+        <label className="a-field"><span>Pro koho (nepovinné)</span><input name="recipientName" className="a-input" placeholder="Jana" defaultValue={prefill?.recipientName} /></label>
         <label className="a-field"><span>Od koho (nepovinné)</span><input name="buyerName" className="a-input" placeholder="Petr" defaultValue={prefill?.buyerName} /></label>
       </div>
-      <label className="a-field"><span>Věnování (nepovinné)</span><textarea name="message" rows={2} className="a-input" placeholder="Všechno nejlepší k narozeninám!" /></label>
+      <label className="a-field"><span>Věnování (nepovinné)</span><textarea name="message" rows={2} className="a-input" placeholder="Všechno nejlepší k narozeninám!" defaultValue={prefill?.message} /></label>
       <div className="a-grid2 a-grid2--even">
         <label className="a-field"><span>E-mail, kam poukaz poslat</span><input name="email" type="email" inputMode="email" className="a-input" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="zakaznice@email.cz" /></label>
         <label className="a-field"><span>Platnost (měsíců)</span><input name="months" type="number" min={1} max={36} defaultValue={months} className="a-input" /></label>

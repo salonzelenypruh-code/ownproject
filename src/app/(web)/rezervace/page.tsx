@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { Logo } from "@/components/Logo";
@@ -9,6 +10,7 @@ export const metadata = pageMeta("/rezervace", "Rezervace termínu", "Objednejte
 
 export default async function Rezervace({ searchParams }: { searchParams: Promise<{ sluzba?: string }> }) {
   const [{ sluzba }, s] = await Promise.all([searchParams, getSettings()]);
+  if (sluzba === "poukaz") redirect("/darkovy-poukaz#objednat");
   return (
     <>
       <Breadcrumbs items={[["Rezervace", "/rezervace"]]} />
@@ -26,8 +28,8 @@ export default async function Rezervace({ searchParams }: { searchParams: Promis
         )}
         <div className="form-grid">
           <section className="panel" aria-labelledby="form-h">
-            <h2 id="form-h" className={s.bookingUrl ? undefined : "visually-hidden"}>{s.bookingUrl ? "Dárkový poukaz nebo dotaz" : "Formulář rezervace"}</h2>
-            <ReservationForm preset={sluzba ?? (s.bookingUrl ? "poukaz" : undefined)} inquiry={Boolean(s.bookingUrl)} />
+            <h2 id="form-h" className={s.bookingUrl ? undefined : "visually-hidden"}>{s.bookingUrl ? "Dotaz" : "Formulář rezervace"}</h2>
+            <ReservationForm preset={sluzba} inquiry={Boolean(s.bookingUrl)} />
           </section>
           <aside className="panel call-panel" aria-labelledby="call-h">
             <Logo size={100} />

@@ -64,7 +64,6 @@ export function ReservationForm({ preset, inquiry = false }: { preset?: string; 
           <option value="obliceje">Obličejová masáž</option>
           <option value="masaz">Masáž</option>
           <option value="balicek">Balíček masáž + kosmetika</option>
-          <option value="poukaz">Dárkový poukaz</option>
           <option value="jine">Jiné / poradím se</option>
         </select>
         <span className="field__error" id="sluzba-error" aria-live="polite">{err("sluzba")}</span>

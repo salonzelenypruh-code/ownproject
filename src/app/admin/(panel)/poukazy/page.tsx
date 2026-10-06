@@ -46,7 +46,9 @@ export default async function Poukazy({ searchParams }: { searchParams: Promise<
           <ul className="a-stack">
             {orders.map((o) => (
               <li key={o.id} className="a-review">
-                <p><strong>{o.name}</strong> <span className="a-muted a-small">· {fmtDateTime(o.createdAt)}</span></p>
+                <p><strong>{o.meta?.amount ? `${o.meta.amount.toLocaleString("cs-CZ")} Kč` : o.service}</strong> · {o.name} <span className="a-muted a-small">· {fmtDateTime(o.createdAt)}</span></p>
+                {(o.meta?.recipientName || o.meta?.message) && <p className="a-small">{o.meta?.recipientName && <>Pro: <b>{o.meta.recipientName}</b>. </>}{o.meta?.message && <>„{o.meta.message}“</>}</p>}
+                <p className="a-small">Doručení: {o.meta?.deliverTo === "obdarovany" ? `e-mailem obdarované/mu (${o.meta.recipientEmail})` : o.meta?.deliverTo === "osobne" ? "vyzvedne osobně" : "e-mailem kupujícímu"}</p>
                 <p className="a-muted a-small">{o.phone} · <span className="a-break">{o.email}</span>{o.preferredDate ? ` · chce do ${fmtDate(o.preferredDate)}` : ""}</p>
                 {o.note && <p className="a-note">{o.note}</p>}
                 <div className="a-actions">
@@ -70,7 +72,12 @@ export default async function Poukazy({ searchParams }: { searchParams: Promise<
       <details className="a-card a-collapse" id="vystavit" open={all.length === 0 || !!order}>
         <summary><h2 style={{ margin: 0 }}>+ Vytvořit nový poukaz</h2></summary>
         <VoucherForm key={order?.id ?? "new"} presets={presets.length ? presets : [1100, 1750, 2300]} months={months}
-          prefill={order ? { orderId: order.id, buyerName: order.name, email: order.email, note: [`Objednávka z webu ${fmtDateTime(order.createdAt)}, tel. ${order.phone}`, order.note].filter(Boolean).join(" – ").slice(0, 900) } : undefined} />
+          prefill={order ? {
+            orderId: order.id, buyerName: order.name,
+            email: order.meta?.deliverTo === "obdarovany" ? order.meta.recipientEmail ?? "" : order.meta?.deliverTo === "osobne" ? "" : order.email,
+            amount: order.meta?.amount, recipientName: order.meta?.recipientName ?? "", message: order.meta?.message ?? "",
+            note: [`Objednávka z webu ${fmtDateTime(order.createdAt)}, ${order.name}, tel. ${order.phone}`, order.note].filter(Boolean).join(" – ").slice(0, 900),
+          } : undefined} />
       </details>
 
       <nav className="a-tabs a-tabs--scroll" aria-label="Filtr">

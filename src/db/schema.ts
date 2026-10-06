@@ -62,6 +62,8 @@ export const reviews = sqliteTable("reviews", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
 });
 
+export type VoucherOrderMeta = { amount?: number; recipientName?: string; message?: string; deliverTo?: "kupujici" | "obdarovany" | "osobne"; recipientEmail?: string };
+
 export const SUBMISSION_STATUS = {
   nova: "Nová",
   vyrizena: "Vyřízená",
@@ -82,6 +84,8 @@ export const submissions = sqliteTable("submissions", {
   status: text("status").$type<SubmissionStatus>().notNull().default("nova"),
   adminNote: text("admin_note").notNull().default(""),
   emailSent: integer("email_sent", { mode: "boolean" }).notNull().default(false),
+  /** Údaje objednávky poukazu: hodnota, pro koho, věnování, kam poslat. */
+  meta: text("meta", { mode: "json" }).$type<VoucherOrderMeta>().notNull().default(sql`'{}'`),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
 });
 

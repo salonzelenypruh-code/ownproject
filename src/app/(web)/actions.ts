@@ -99,3 +99,60 @@ export async function submitReview(_: FormState, fd: FormData): Promise<FormStat
   revalidatePath("/admin", "layout");
   return { ok: true, message: "Děkujeme za recenzi! Na webu se objeví po schválení." };
 }
+
+const DELIVERY: Record<string, string> = {
+  kupujici: "E-mailem mně (kupujícímu)",
+  obdarovany: "E-mailem přímo obdarované/mu",
+  osobne: "Vyzvednu si osobně v salonu",
+};
+
+const voucherOrderSchema = z.object({
+  jmeno: z.string().trim().min(2, "Vyplňte prosím své jméno a příjmení.").max(120),
+  telefon: z.string().trim().regex(/^[+0-9 ()-]{9,20}$/, "Vyplňte prosím telefon."),
+  email: z.string().trim().email("Zadejte prosím platný e-mail.").max(160),
+  hodnota: z.string(),
+  hodnotaJina: z.string().optional().default(""),
+  proKoho: z.string().trim().max(120).optional().default(""),
+  venovani: z.string().trim().max(400).optional().default(""),
+  doruceni: z.string().refine((v) => v in DELIVERY, "Vyberte, kam poukaz poslat."),
+  emailObdarovane: z.string().trim().max(160).optional().default(""),
+  poznamka: z.string().max(1000).optional().default(""),
+});
+
+export async function submitVoucherOrder(_: FormState, fd: FormData): Promise<FormState> {
+  if (fd.get("_honey")) return { ok: true, message: "Děkujeme." };
+  const parsed = voucherOrderSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) {
+    const errors: Record<string, string> = {};
+    for (const i of parsed.error.issues) errors[String(i.path[0])] ??= i.message;
+    return { ok: false, message: "Zkontrolujte prosím zvýrazněná pole.", errors };
+  }
+  const d = parsed.data;
+  const amount = Number((d.hodnota === "jina" ? d.hodnotaJina : d.hodnota).replace(/\s/g, ""));
+  if (!Number.isFinite(amount) || amount < 300 || amount > 50000) return { ok: false, message: "Zkontrolujte prosím zvýrazněná pole.", errors: { hodnotaJina: "Zadejte hodnotu poukazu v Kč (300–50 000)." } };
+  if (d.doruceni === "obdarovany" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.emailObdarovane)) {
+    return { ok: false, message: "Zkontrolujte prosím zvýrazněná pole.", errors: { emailObdarovane: "Zadejte e-mail obdarované/ho." } };
+  }
+  if (await rateLimited()) return { ok: false, message: "Odesíláte příliš často. Zkuste to prosím za chvíli, nebo zavolejte." };
+
+  const value = `${amount.toLocaleString("cs-CZ")} Kč`;
+  const [created] = await db.insert(schema.submissions).values({
+    kind: "poukaz", name: d.jmeno, phone: d.telefon, email: d.email, service: `Dárkový poukaz ${value}`, note: d.poznamka,
+    meta: { amount, recipientName: d.proKoho, message: d.venovani, deliverTo: d.doruceni as "kupujici", recipientEmail: d.emailObdarovane },
+  }).returning();
+
+  const s = await getSettings();
+  const sent = await sendMail({
+    to: s.notifyEmail,
+    replyTo: d.email,
+    subject: `Objednávka dárkového poukazu ${value} – ${d.jmeno}`,
+    html: `<div style="font-family:Arial,sans-serif;font-size:15px;color:#111">
+      <h2 style="margin:0 0 12px">🎁 Objednávka dárkového poukazu</h2>
+      <table>${row("Hodnota", value)}${row("Objednává", d.jmeno)}${row("Telefon", d.telefon)}${row("E-mail", d.email)}${row("Pro koho", d.proKoho)}${row("Věnování", d.venovani)}${row("Doručení", DELIVERY[d.doruceni])}${row("E-mail obdarované/ho", d.doruceni === "obdarovany" ? d.emailObdarovane : "")}</table>
+      ${d.poznamka ? `<p style="margin-top:12px"><strong>Poznámka:</strong><br>${esc(d.poznamka).replace(/\n/g, "<br>")}</p>` : ""}
+      <p style="margin-top:16px;color:#555">Poukaz vystavíte v administraci: Poukazy → Objednávky z webu → Vystavit poukaz (údaje se předvyplní).</p></div>`,
+  });
+  if (sent) await db.update(schema.submissions).set({ emailSent: true }).where(eq(schema.submissions.id, created.id));
+  revalidatePath("/admin", "layout");
+  return { ok: true, message: "Děkujeme za objednávku.", summary: { service: `Dárkový poukaz ${value}`, date: d.proKoho, time: DELIVERY[d.doruceni], name: d.jmeno, email: d.email, phone: d.telefon } };
+}
