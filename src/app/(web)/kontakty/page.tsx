@@ -2,7 +2,8 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { pageMeta } from "@/lib/seo";
 import { MapEmbed } from "@/components/MapEmbed";
 import { BookLink } from "@/components/BookLink";
-import { WaIcon } from "@/components/icons";
+import { IgIcon, WaIcon } from "@/components/icons";
+import { instagram } from "@/lib/social";
 import { getSettings, telHref, waHref } from "@/lib/settings";
 
 export const metadata = pageMeta("/kontakty", "Kontakt – Roškotova 1717/2, Praha 4 – Braník", "Salon najdete v Poliklinice Zelený pruh, Roškotova 1717/2, Praha 4 – Braník. Otevřeno Po–So 8:00–20:00. Telefon, WhatsApp, e-mail a mapa.");
@@ -24,6 +25,11 @@ export default async function Kontakty() {
               <p><a href={telHref(s.phone)}>{s.phone}</a></p>
               {s.whatsapp && <p><a className="wa-link" href={waHref(s.whatsapp)} target="_blank" rel="noopener"><WaIcon />Napsat na WhatsApp</a></p>}
             </div>
+            {instagram(s.instagram) && (
+              <div className="contact-block"><span className="eyebrow">Instagram</span>
+                <p><a className="wa-link" href={instagram(s.instagram)!.url} target="_blank" rel="noopener me"><IgIcon />{instagram(s.instagram)!.handle}</a></p>
+              </div>
+            )}
             <div className="contact-block"><span className="eyebrow">E-mail</span><p><a href={`mailto:${s.email}`}>{s.email}</a></p></div>
             <div className="contact-block"><span className="eyebrow">Otevírací doba</span>
               <dl className="hours">

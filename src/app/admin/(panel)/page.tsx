@@ -74,6 +74,19 @@ export default async function Dashboard() {
         </ActionForm>
       </section>
 
+      <section className="a-card" id="instagram">
+        <div className="a-card__head">
+          <h2>Instagram</h2>
+          <span className={`a-pill ${s.instagram ? "a-pill--ok" : "a-pill--off"}`}>{s.instagram ? "Na webu" : "Nevyplněno"}</span>
+        </div>
+        <p className="a-hint">Po vyplnění se Instagram ukáže v patičce, na Kontaktech a na úvodní stránce.</p>
+        <ActionForm action={saveSettings} className="a-stack">
+          <label className="a-field"><span>Odkaz na profil nebo @jméno</span>
+            <input name="instagram" defaultValue={s.instagram} className="a-input" placeholder="@salonzelenypruh" autoCapitalize="none" autoCorrect="off" />
+          </label>
+          <SubmitButton>Uložit Instagram</SubmitButton>
+        </ActionForm>
+      </section>
     </>
   );
 }

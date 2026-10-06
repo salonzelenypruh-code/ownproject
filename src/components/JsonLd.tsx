@@ -2,11 +2,12 @@ import type { Review, Service } from "@/db/schema";
 import { CATEGORIES } from "@/db/schema";
 import type { Settings } from "@/lib/settings";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import { instagram } from "@/lib/social";
 
 /** Strukturovaná data pro Google: BeautySalon + ceník (OfferCatalog). */
 export function JsonLd({ s, services = [], reviews = [] }: { s: Settings; services?: Service[]; reviews?: Review[] }) {
   const postal = s.city.match(/^(\d{3}\s?\d{2})/)?.[1];
-  const sameAs = [s.instagram, s.facebook, s.googleMaps, s.bookingUrl].filter(Boolean);
+  const sameAs = [instagram(s.instagram)?.url, s.facebook, s.googleMaps, s.bookingUrl].filter(Boolean);
   // „8:00 – 20:00“ -> otevírací doba pro Google (texty jako „zavřeno“ nebo „dle dohody“ se vynechají)
   const span = (t: string) => { const m = t.match(/(\d{1,2})[:.](\d{2})\s*[–-]\s*(\d{1,2})[:.](\d{2})/); return m ? [`${m[1].padStart(2, "0")}:${m[2]}`, `${m[3].padStart(2, "0")}:${m[4]}`] : null; };
   const hours = ([[["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], s.hoursWeek], [["Saturday"], s.hoursSat], [["Sunday"], s.hoursSun]] as [string[], string][])

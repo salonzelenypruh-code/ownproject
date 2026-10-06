@@ -649,3 +649,14 @@ html[data-consent] .cookie-bar:not(.cookie-bar--forced) { display: none; }
 .form-done__sum dt { color: var(--muted); min-width: 52px; }
 .form-done__sum dd { margin: 0; font-weight: 600; }
 .form-done__note { color: var(--muted); font-size: .9rem; margin: 0; }
+
+/* Instagram */
+.ig-icon { width: 1.2em; height: 1.2em; flex-shrink: 0; }
+.footer-ig { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; }
+.footer-ig .ig-icon { color: var(--gold, #d4b26a); width: 22px; height: 22px; }
+.ig-band { display: flex; align-items: center; gap: 20px; }
+.ig-band > .ig-icon { width: 48px; height: 48px; color: var(--gold, #d4b26a); }
+.ig-band h2 { margin: 0 0 4px; font-size: 1.5rem; }
+.ig-band p { margin: 0; color: var(--muted); }
+.ig-band .btn { margin-left: auto; flex-shrink: 0; }
+@media (max-width: 640px) { .ig-band { flex-direction: column; text-align: center; } .ig-band .btn { margin: 0; } }

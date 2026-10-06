@@ -263,6 +263,11 @@ export async function deleteReview(fd: FormData) {
 
 export async function saveSettings(_: ActionState, fd: FormData): Promise<ActionState> {
   await requireAdmin();
+  if (fd.has("instagram")) {
+    const { instagram } = await import("@/lib/social");
+    const raw = String(fd.get("instagram") || "").trim();
+    if (raw && !instagram(raw)) return { ok: false, message: "Instagram: vložte odkaz na profil (instagram.com/…) nebo @jméno." };
+  }
   if (fd.has("bookingUrl")) {
     const url = String(fd.get("bookingUrl") || "").trim();
     if (url && !/^https:\/\/[^\s]+\.[^\s]+/.test(url)) return { ok: false, message: "Odkaz na rezervace musí začínat https:// (zkopírujte ho celý z Notina)." };

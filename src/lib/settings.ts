@@ -22,12 +22,12 @@ export const SETTINGS = {
   operatorName: { label: "Jméno nebo název firmy", group: "Provozovatel (patička webu)", value: "[JMÉNO / FIRMA]" },
   operatorId: { label: "IČO", group: "Provozovatel (patička webu)", value: "[IČO]" },
   operatorAddress: { label: "Sídlo / místo podnikání", group: "Provozovatel (patička webu)", value: "[SÍDLO]" },
-  instagram: { label: "Instagram (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
-  facebook: { label: "Facebook (celý odkaz, nepovinné)", group: "Sociální sítě a Google", value: "" },
-  googleMaps: { label: "Odkaz na firmu v Google Mapách (nepovinné)", group: "Sociální sítě a Google", value: "" },
-  gaId: { label: "Google Analytics 4 – ID měření (G-XXXXXXX, nepovinné)", group: "Sociální sítě a Google", value: "" },
-  fbPixelId: { label: "Facebook Pixel ID (jen číslice, nepovinné)", group: "Sociální sítě a Google", value: "" },
-  googleVerification: { label: "Ověřovací kód Google Search Console (nepovinné)", group: "Sociální sítě a Google", value: "" },
+  instagram: { label: "Instagram – odkaz na profil nebo @jméno", group: "Sociální sítě", value: "" },
+  facebook: { label: "Facebook – odkaz na stránku (nepovinné)", group: "Sociální sítě", value: "" },
+  googleMaps: { label: "Odkaz na firmu v Google Mapách (nepovinné)", group: "Google", value: "" },
+  gaId: { label: "Google Analytics 4 – ID měření (G-XXXXXXX, nepovinné)", group: "Google", value: "" },
+  fbPixelId: { label: "Facebook Pixel ID (jen číslice, nepovinné)", group: "Google", value: "" },
+  googleVerification: { label: "Ověřovací kód Google Search Console (nepovinné)", group: "Google", value: "" },
   notifyEmail: { label: "Kam posílat žádosti z formulářů", group: "Formuláře", value: "galinajork@gmail.com" },
 } as const;
 

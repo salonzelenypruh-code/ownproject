@@ -7,6 +7,8 @@ import { ReviewForm } from "@/components/ReviewForm";
 import { Stars } from "@/components/icons";
 import { FaqSection } from "@/components/FaqSection";
 import { buildFaq } from "@/lib/faq";
+import { instagram } from "@/lib/social";
+import { IgIcon } from "@/components/icons";
 import { getPhotos, getPublishedReviews, getServices } from "@/lib/data";
 import { getSettings } from "@/lib/settings";
 
@@ -78,6 +80,19 @@ export default async function Home() {
         ) : <p className="section-sub">Byli jste u nás spokojeni? Budeme rádi za vaši první recenzi.</p>}
         <ReviewForm />
       </section>
+
+      {instagram(s.instagram) && (
+        <section className="wrap wrap--narrow section" aria-labelledby="ig-nadpis" style={{ paddingTop: 0 }}>
+          <div className="panel ig-band">
+            <IgIcon />
+            <div>
+              <h2 id="ig-nadpis">Sledujte mě na Instagramu</h2>
+              <p>Novinky, výsledky ošetření a volné termíny najdete na <strong>{instagram(s.instagram)!.handle}</strong>.</p>
+            </div>
+            <a className="btn btn--primary" href={instagram(s.instagram)!.url} target="_blank" rel="noopener me">Otevřít Instagram</a>
+          </div>
+        </section>
+      )}
 
       <FaqSection items={buildFaq(s, allServices)} />
     </>

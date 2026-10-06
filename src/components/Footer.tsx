@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Settings } from "@/lib/settings";
 import { telHref, waHref } from "@/lib/settings";
-import { WaIcon } from "./icons";
+import { IgIcon, WaIcon } from "./icons";
+import { instagram } from "@/lib/social";
 import { Logo } from "./Logo";
 import { BookLink } from "./BookLink";
 import { CookieSettingsLink } from "./CookieBar";
@@ -19,6 +20,7 @@ const filled = (v: string) => Boolean(v) && !v.includes("[");
 export function Footer({ s }: { s: Settings }) {
   const mapsUrl = s.googleMaps || `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.mapQuery)}`;
   const operator = [s.operatorName, s.operatorId && `IČO ${s.operatorId}`, s.operatorAddress].filter((x): x is string => Boolean(x) && filled(x));
+  const ig = instagram(s.instagram);
   const hours: [string, string][] = [["Po – Pá", s.hoursWeek], ["Sobota", s.hoursSat], ["Neděle", s.hoursSun]];
 
   return (
@@ -34,9 +36,9 @@ export function Footer({ s }: { s: Settings }) {
             </div>
           </div>
           <div className="footer-top__cta">
-            {(s.instagram || s.facebook) && (
+            {(ig || s.facebook) && (
               <p className="footer-social">
-                {s.instagram && <a href={s.instagram} target="_blank" rel="noopener me">Instagram</a>}
+                {ig && <a className="footer-ig" href={ig.url} target="_blank" rel="noopener me" aria-label={`Instagram ${ig.handle}`}><IgIcon /><span>{ig.handle}</span></a>}
                 {s.facebook && <a href={s.facebook} target="_blank" rel="noopener me">Facebook</a>}
               </p>
             )}
