@@ -19,7 +19,7 @@ const filled = (v: string) => Boolean(v) && !v.includes("[");
 
 export function Footer({ s }: { s: Settings }) {
   const mapsUrl = s.googleMaps || `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.mapQuery)}`;
-  const operator = [s.operatorName, s.operatorId && `IČO ${s.operatorId}`, s.operatorAddress].filter((x): x is string => Boolean(x) && filled(x));
+  const operator = [s.operatorName, s.operatorId && `IČO ${s.operatorId}`, s.operatorAddress, s.operatorRegistry].filter((x): x is string => Boolean(x) && filled(x));
   const ig = instagram(s.instagram);
   const hours: [string, string][] = [["Po – Pá", s.hoursWeek], ["Sobota", s.hoursSat], ["Neděle", s.hoursSun]];
 

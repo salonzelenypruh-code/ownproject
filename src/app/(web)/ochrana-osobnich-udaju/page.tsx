@@ -10,7 +10,7 @@ const filled = (v: string) => Boolean(v) && !v.includes("[");
 
 export default async function Gdpr() {
   const s = await getSettings();
-  const operator = [filled(s.operatorName) ? s.operatorName : "Galyna Tretyak", filled(s.operatorId) && `IČO ${s.operatorId}`, filled(s.operatorAddress) && s.operatorAddress].filter(Boolean).join(", ");
+  const operator = [filled(s.operatorName) ? s.operatorName : "Galyna Tretyak", filled(s.operatorId) && `IČO ${s.operatorId}`, filled(s.operatorAddress) && `sídlo ${s.operatorAddress}`, filled(s.operatorRegistry) && s.operatorRegistry].filter(Boolean).join(", ");
   return (
     <>
       <Breadcrumbs items={[["Ochrana osobních údajů", "/ochrana-osobnich-udaju"]]} />

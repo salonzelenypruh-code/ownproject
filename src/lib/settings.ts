@@ -22,6 +22,7 @@ export const SETTINGS = {
   operatorName: { label: "Jméno nebo název firmy", group: "Provozovatel (patička webu)", value: "[JMÉNO / FIRMA]" },
   operatorId: { label: "IČO", group: "Provozovatel (patička webu)", value: "[IČO]" },
   operatorAddress: { label: "Sídlo / místo podnikání", group: "Provozovatel (patička webu)", value: "[SÍDLO]" },
+  operatorRegistry: { label: "Zápis v obchodním rejstříku (nepovinné)", group: "Provozovatel (patička webu)", value: "" },
   instagram: { label: "Instagram – odkaz na profil nebo @jméno", group: "Sociální sítě", value: "" },
   facebook: { label: "Facebook – odkaz na stránku (nepovinné)", group: "Sociální sítě", value: "" },
   googleMaps: { label: "Odkaz na firmu v Google Mapách (nepovinné)", group: "Google", value: "" },
