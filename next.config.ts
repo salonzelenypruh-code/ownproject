@@ -34,7 +34,13 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["sharp", "@libsql/client"],
   experimental: { serverActions: { bodySizeLimit: "15mb" } },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/admin/:path*", headers: noindex },
+      { source: "/admin", headers: noindex },
+      { source: "/poukaz/:path*", headers: noindex },
+    ];
   },
   async redirects() {
     // Staré adresy statické verze (*.html) -> nové

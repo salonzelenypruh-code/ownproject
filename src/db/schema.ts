@@ -95,6 +95,9 @@ export const adminUsers = sqliteTable("admin_users", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  /** Zvýšení odhlásí všechna zařízení (změna hesla, „odhlásit všude“). */
+  sessionVersion: integer("session_version").notNull().default(1),
+  lastLoginAt: integer("last_login_at", { mode: "timestamp_ms" }),
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
 });
 
@@ -129,3 +132,12 @@ export const vouchers = sqliteTable("vouchers", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
 });
 export type Voucher = typeof vouchers.$inferSelect;
+
+/** Pokusy o přihlášení – omezení hádání hesla (podle IP i e-mailu). */
+export const loginAttempts = sqliteTable("login_attempts", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  ip: text("ip").notNull(),
+  email: text("email").notNull(),
+  ok: integer("ok", { mode: "boolean" }).notNull().default(false),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().default(now),
+});

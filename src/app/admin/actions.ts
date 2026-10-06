@@ -1,7 +1,7 @@
 "use server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { and, asc, eq, gt, gte, lt, desc } from "drizzle-orm";
+import { and, asc, count, eq, gt, gte, lt, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db, schema } from "@/db";
@@ -17,22 +17,54 @@ const num = (v: FormDataEntryValue | null) => Number(v);
 
 /* ---------------- Přihlášení ---------------- */
 
-const attempts = new Map<string, number[]>();
+// Omezení hádání hesla – uložené v databázi, takže platí napříč servery Vercelu.
+const WINDOW_MS = 15 * 60_000;
+const MAX_PER_EMAIL = 5;
+const MAX_PER_IP = 20;
+// Hash pro neexistující účet – porovnání trvá stejně dlouho, z doby odpovědi nejde poznat, jestli e-mail existuje.
+const DUMMY_HASH = "$2b$12$WM3OWP13N0Mo73UnK8KoQOm4TxBE1tt/89Y.qaMnpoTxhWq3P4KE2";
+
+async function clientIp() {
+  const h = await (await import("next/headers")).headers();
+  return h.get("x-real-ip") || h.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+}
 
 export async function login(_: ActionState, fd: FormData): Promise<ActionState> {
-  const email = String(fd.get("email") || "").toLowerCase().trim();
-  const password = String(fd.get("password") || "");
-  const now = Date.now();
-  const list = (attempts.get(email) || []).filter((t) => now - t < 15 * 60_000);
-  if (list.length >= 8) return { ok: false, message: "Příliš mnoho pokusů. Zkuste to za 15 minut." };
-  const [user] = await db.select().from(schema.adminUsers).where(eq(schema.adminUsers.email, email));
-  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-    attempts.set(email, [...list, now]);
-    return { ok: false, message: "Nesprávný e-mail nebo heslo." };
+  if (fd.get("website")) return { ok: false, message: "Nesprávný e-mail nebo heslo." }; // honeypot
+  const email = String(fd.get("email") || "").toLowerCase().trim().slice(0, 200);
+  const password = String(fd.get("password") || "").slice(0, 200);
+  const ip = await clientIp();
+  const since = new Date(Date.now() - WINDOW_MS);
+  const t = schema.loginAttempts;
+  const [[{ n: byEmail }], [{ n: byIp }]] = await Promise.all([
+    db.select({ n: count() }).from(t).where(and(eq(t.email, email), eq(t.ok, false), gt(t.createdAt, since))),
+    db.select({ n: count() }).from(t).where(and(eq(t.ip, ip), eq(t.ok, false), gt(t.createdAt, since))),
+  ]);
+  if (byEmail >= MAX_PER_EMAIL || byIp >= MAX_PER_IP) {
+    return { ok: false, message: "Příliš mnoho neúspěšných pokusů. Zkuste to znovu za 15 minut." };
   }
-  attempts.delete(email);
-  await createSession(user.email);
+  const [user] = await db.select().from(schema.adminUsers).where(eq(schema.adminUsers.email, email));
+  const valid = await bcrypt.compare(password, user?.passwordHash ?? DUMMY_HASH);
+  await db.insert(t).values({ ip, email, ok: Boolean(user && valid) });
+  if (!user || !valid) {
+    await new Promise((r) => setTimeout(r, 400 + Math.random() * 400));
+    const left = MAX_PER_EMAIL - byEmail - 1;
+    return { ok: false, message: left === 2 ? "Nesprávný e-mail nebo heslo. Zbývají 2 pokusy." : left === 1 ? "Nesprávný e-mail nebo heslo. Zbývá poslední pokus." : left <= 0 ? "Nesprávný e-mail nebo heslo. Přihlášení je na 15 minut zablokované." : "Nesprávný e-mail nebo heslo." };
+  }
+  await db.update(schema.adminUsers).set({ lastLoginAt: new Date() }).where(eq(schema.adminUsers.id, user.id));
+  // úklid starých záznamů
+  await db.delete(t).where(lt(t.createdAt, new Date(Date.now() - 30 * 86_400_000)));
+  await createSession(user.email, user.sessionVersion);
   redirect("/admin");
+}
+
+/** Odhlásí všechna zařízení (např. ztracený telefon). */
+export async function logoutEverywhere() {
+  const { email } = await requireAdmin();
+  const [user] = await db.select().from(schema.adminUsers).where(eq(schema.adminUsers.email, email));
+  if (user) await db.update(schema.adminUsers).set({ sessionVersion: user.sessionVersion + 1 }).where(eq(schema.adminUsers.id, user.id));
+  await destroySession();
+  redirect("/admin/prihlaseni");
 }
 
 export async function logout() {
@@ -44,12 +76,15 @@ export async function changePassword(_: ActionState, fd: FormData): Promise<Acti
   const { email } = await requireAdmin();
   const current = String(fd.get("current") || "");
   const next = String(fd.get("next") || "");
-  if (next.length < 8) return { ok: false, message: "Nové heslo musí mít alespoň 8 znaků." };
+  if (next.length < 10) return { ok: false, message: "Nové heslo musí mít alespoň 10 znaků." };
+  if (/^[a-zà-ž]+$/i.test(next) || /^\d+$/.test(next)) return { ok: false, message: "Heslo musí obsahovat písmena i číslice nebo jiné znaky." };
   if (next !== fd.get("again")) return { ok: false, message: "Nová hesla se neshodují." };
   const [user] = await db.select().from(schema.adminUsers).where(eq(schema.adminUsers.email, email));
   if (!user || !(await bcrypt.compare(current, user.passwordHash))) return { ok: false, message: "Současné heslo není správné." };
-  await db.update(schema.adminUsers).set({ passwordHash: await bcrypt.hash(next, 12) }).where(eq(schema.adminUsers.id, user.id));
-  return { ok: true, message: "Heslo bylo změněno." };
+  const version = user.sessionVersion + 1;
+  await db.update(schema.adminUsers).set({ passwordHash: await bcrypt.hash(next, 12), sessionVersion: version }).where(eq(schema.adminUsers.id, user.id));
+  await createSession(user.email, version); // toto zařízení zůstane přihlášené, ostatní se odhlásí
+  return { ok: true, message: "Heslo bylo změněno. Ostatní zařízení byla odhlášena." };
 }
 
 /* ---------------- Žádosti z formulářů ---------------- */
